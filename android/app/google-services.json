@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "354403298691",
+    "project_id": "buddhamindfulness-7c84c",
+    "storage_bucket": "buddhamindfulness-7c84c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354403298691:android:5c6c1b6533fc8b8fa39ab6",
+        "android_client_info": {
+          "package_name": "com.buddha_mindfulness.buddha_mindfulness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354403298691-fc0t02dv28k9c69lig88sl69th9h4e8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4HVs9WSqB8lQfAIgwQoak-oXRgoxREjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354403298691-fc0t02dv28k9c69lig88sl69th9h4e8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
