@@ -6,7 +6,7 @@ class FireController {
   static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   final CollectionReference _dataCollectionReferance =
-      _firebaseFirestore.collection("data");
+      _firebaseFirestore.collection("post");
 
   Stream<QuerySnapshot> getEntry() {
     print('getMessage');

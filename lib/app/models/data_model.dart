@@ -1,9 +1,14 @@
 class DataModel {
-  String? image;
-  String? video;
-  DataModel({required this.image, required this.video});
+  String? mediaLink;
+  bool? isVideo;
+  String? videoThumbnail;
+  DataModel(
+      {required this.mediaLink,
+      required this.videoThumbnail,
+      required this.isVideo});
   DataModel.fromJson(Map<String, dynamic> json) {
-    image = json["image"];
-    video = json["video"];
+    mediaLink = json["mediaLink"];
+    videoThumbnail = json["videoThumbnail"];
+    isVideo = json["isVideo"];
   }
 }
