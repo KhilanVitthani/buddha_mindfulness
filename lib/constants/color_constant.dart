@@ -2,9 +2,9 @@ import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:flutter/material.dart';
 
 class BaseTheme {
-  Color get primaryTheme => fromHex('#23262F');
+  Color get primaryTheme => fromHex('#C02E17');
   Color get buttonColor => fromHex('#FE9013');
-  Color get textGrayColor => fromHex("#4A454B");
+  Color get textGrayColor => fromHex("#5E5E5E");
 
   List<BoxShadow> get getShadow {
     return [

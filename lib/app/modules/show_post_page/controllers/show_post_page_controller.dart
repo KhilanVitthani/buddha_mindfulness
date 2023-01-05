@@ -37,8 +37,6 @@ class ShowPostPageController extends GetxController {
 
   @override
   void dispose() {
-    flickManager!.value.dispose();
-
     super.dispose();
   }
 

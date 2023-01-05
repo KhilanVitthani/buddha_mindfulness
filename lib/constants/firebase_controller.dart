@@ -5,11 +5,18 @@ import '../main.dart';
 class FireController {
   static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  final CollectionReference _dataCollectionReferance =
+  final CollectionReference _postCollectionReferance =
       _firebaseFirestore.collection("post");
+  final CollectionReference _dailyThoughtCollectionReferance =
+      _firebaseFirestore.collection("dailyThought");
 
-  Stream<QuerySnapshot> getEntry() {
+  Stream<QuerySnapshot> getPost() {
     print('getMessage');
-    return _dataCollectionReferance.snapshots();
+    return _postCollectionReferance.snapshots();
+  }
+
+  Stream<QuerySnapshot> getDailyThought() {
+    print('getMessage');
+    return _dailyThoughtCollectionReferance.snapshots();
   }
 }
