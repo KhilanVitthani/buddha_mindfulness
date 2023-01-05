@@ -13,7 +13,9 @@ class FireController {
 
   Stream<QuerySnapshot> getPost() {
     print('getMessage');
-    return _postCollectionReferance.snapshots();
+    return _postCollectionReferance
+        .orderBy("dateTime", descending: false)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> getDailyThought() {

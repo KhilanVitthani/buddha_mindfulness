@@ -36,7 +36,7 @@ class HomeView extends GetWidget<HomeController> {
                   top: MySize.getHeight(40), bottom: MySize.getHeight(8)),
               child: Text(
                 "Today’s Quote",
-                style: GoogleFonts.lato(
+                style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: MySize.getHeight(26),
                     color: appTheme.primaryTheme),
@@ -73,6 +73,10 @@ class HomeView extends GetWidget<HomeController> {
                                       .docs[data.data!.docs.length - index - 1]
                                       .data() as Map<String, dynamic>,
                                 );
+                                if (controller.likeList
+                                    .contains(dailyThought.uId!)) {
+                                  dailyThought.isLiked!.value = true;
+                                }
                                 print(DateTime.now());
                                 print(dailyThought.mediaLink);
                                 if (!isNullEmptyOrFalse(
@@ -83,6 +87,7 @@ class HomeView extends GetWidget<HomeController> {
                                             dailyThought.mediaLink!),
                                   ).obs;
                                 }
+
                                 return GestureDetector(
                                   onTap: () {},
                                   child: Padding(
@@ -128,14 +133,35 @@ class HomeView extends GetWidget<HomeController> {
                                               SizedBox(
                                                 width: MySize.getWidth(14),
                                               ),
-                                              GestureDetector(
-                                                onTap: () {},
-                                                child: SvgPicture.asset(
-                                                  imagePath + "like.svg",
-                                                  height:
-                                                      MySize.getHeight(22.94),
-                                                ),
-                                              ),
+                                              Obx(() {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    dailyThought.isLiked!
+                                                        .toggle();
+                                                    if (dailyThought
+                                                        .isLiked!.isTrue) {
+                                                      controller.addDataToLike(
+                                                          data: dailyThought
+                                                              .uId!);
+                                                    } else {
+                                                      controller
+                                                          .removeDataToLike(
+                                                              data: dailyThought
+                                                                  .uId!);
+                                                    }
+                                                  },
+                                                  child: (dailyThought
+                                                          .isLiked!.isTrue)
+                                                      ? Icon(Icons.favorite)
+                                                      : SvgPicture.asset(
+                                                          imagePath +
+                                                              "like.svg",
+                                                          height:
+                                                              MySize.getHeight(
+                                                                  22.94),
+                                                        ),
+                                                );
+                                              }),
                                               SizedBox(
                                                 width: MySize.getWidth(25),
                                               ),
@@ -210,29 +236,34 @@ class HomeView extends GetWidget<HomeController> {
                     children: [
                       Text(
                         "Recent",
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                             fontSize: MySize.getHeight(18),
                             color: appTheme.textGrayColor,
                             fontWeight: FontWeight.w500),
                       ),
                       Spacer(),
-                      Container(
-                        child: Row(
-                          children: [
-                            Text(
-                              "view all",
-                              style: GoogleFonts.lato(
-                                fontSize: MySize.getHeight(15),
-                                fontWeight: FontWeight.w400,
-                                color: appTheme.textGrayColor,
+                      GestureDetector(
+                        onTap: () {
+                          Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+                        },
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "view all",
+                                style: TextStyle(
+                                  fontSize: MySize.getHeight(15),
+                                  fontWeight: FontWeight.w400,
+                                  color: appTheme.textGrayColor,
+                                ),
                               ),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_outlined,
-                              color: appTheme.textGrayColor,
-                              size: MySize.getHeight(15),
-                            )
-                          ],
+                              Icon(
+                                Icons.arrow_forward_outlined,
+                                color: appTheme.textGrayColor,
+                                size: MySize.getHeight(15),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -251,21 +282,18 @@ class HomeView extends GetWidget<HomeController> {
                             style: TextStyle(color: Colors.amber),
                           );
                         } else {
-                          data.data!.docs.forEach((element) {});
-
-                          print("Data:-${data.data!}");
                           return Column(
                             children: [
                               Expanded(
                                 child: Container(
                                   child: GridView.builder(
+                                    shrinkWrap: true,
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing:
-                                                MySize.getHeight(2),
-                                            mainAxisSpacing:
-                                                MySize.getHeight(2)),
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: MySize.getHeight(2),
+                                      mainAxisSpacing: MySize.getHeight(2),
+                                    ),
                                     itemBuilder: (context, index) {
                                       dailyThoughtModel dataModel =
                                           dailyThoughtModel.fromJson(

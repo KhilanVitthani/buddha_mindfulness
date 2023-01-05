@@ -19,6 +19,9 @@ void main() async {
   await GetStorage.init();
   runApp(
     GetMaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Lato',
+      ),
       debugShowCheckedModeBanner: false,
       title: "Application",
       initialRoute: AppPages.INITIAL,

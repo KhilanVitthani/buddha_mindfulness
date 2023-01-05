@@ -5,10 +5,14 @@ abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
   static const SHOW_POST_PAGE = _Paths.SHOW_POST_PAGE;
+  static const LIKE_SCREEN = _Paths.LIKE_SCREEN;
+  static const ALL_POST_SCREEN = _Paths.ALL_POST_SCREEN;
 }
 
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
   static const SHOW_POST_PAGE = '/show-post-page';
+  static const LIKE_SCREEN = '/like-screen';
+  static const ALL_POST_SCREEN = '/all-post-screen';
 }

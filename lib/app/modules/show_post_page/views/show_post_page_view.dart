@@ -1,3 +1,4 @@
+import 'package:buddha_mindfulness/constants/color_constant.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,14 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
       },
       child: SafeArea(
         child: Scaffold(
+            backgroundColor: Colors.black,
             appBar: AppBar(
-              title: const Text('ShowPostPageView'),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: Text(
+                'ShowPostPageView',
+                style: TextStyle(color: appTheme.primaryTheme),
+              ),
               centerTitle: true,
               leading: GestureDetector(
                 onTap: () async {
@@ -31,7 +38,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: MySize.getWidth(10)),
-                  child: Icon(Icons.arrow_back),
+                  child: Icon(Icons.arrow_back, color: appTheme.primaryTheme),
                 ),
               ),
             ),
@@ -47,7 +54,6 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                   child: CircularProgressIndicator(),
                                 )
                               : Container(
-                                  color: Colors.black,
                                   height: MySize.getHeight(500),
                                   child: FlickVideoPlayer(
                                       flickVideoWithControls:

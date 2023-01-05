@@ -7,6 +7,7 @@ const feedBackEmail = "mobileappxperts3@gmail.com";
 
 class ArgumentConstant {
   static const post = "post";
+  static const likeList = "likeList";
 }
 
 getLogOut() {
