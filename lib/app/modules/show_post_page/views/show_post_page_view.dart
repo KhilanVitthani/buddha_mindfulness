@@ -17,7 +17,11 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.offAllNamed(Routes.HOME);
+        (controller.isFromLike.isTrue)
+            ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+            : (controller.isFromHome.isTrue)
+                ? Get.offAllNamed(Routes.HOME)
+                : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
         return await true;
       },
       child: SafeArea(
@@ -33,8 +37,11 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
               centerTitle: true,
               leading: GestureDetector(
                 onTap: () async {
-                  Get.offAllNamed(Routes.HOME);
-                  controller.dispose();
+                  (controller.isFromLike.isTrue)
+                      ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                      : (controller.isFromHome.isTrue)
+                          ? Get.offAllNamed(Routes.HOME)
+                          : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: MySize.getWidth(10)),

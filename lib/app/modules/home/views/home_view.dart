@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
@@ -27,21 +28,40 @@ class HomeView extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     MySize().init(context);
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: MySize.getWidth(4)),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MySize.getHeight(40), bottom: MySize.getHeight(8)),
-              child: Text(
-                "Today’s Quote",
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: MySize.getHeight(26),
-                    color: appTheme.primaryTheme),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          "Today’s Quote",
+          style: TextStyle(
+              color: appTheme.primaryTheme,
+              fontWeight: FontWeight.w700,
+              fontSize: MySize.getHeight(26)),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Get.offAndToNamed(Routes.LIKE_SCREEN);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: MySize.getHeight(22.5)),
+              child: SvgPicture.asset(
+                imagePath + "like.svg",
+                height: MySize.getHeight(22.94),
               ),
             ),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(
+            left: MySize.getWidth(4),
+            right: MySize.getWidth(4),
+            top: MySize.getHeight(20)),
+        child: Column(
+          children: [
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 builder: (context, data) {
@@ -152,7 +172,13 @@ class HomeView extends GetWidget<HomeController> {
                                                   },
                                                   child: (dailyThought
                                                           .isLiked!.isTrue)
-                                                      ? Icon(Icons.favorite)
+                                                      ? SvgPicture.asset(
+                                                          imagePath +
+                                                              "likeFill.svg",
+                                                          height:
+                                                              MySize.getHeight(
+                                                                  22.94),
+                                                        )
                                                       : SvgPicture.asset(
                                                           imagePath +
                                                               "like.svg",
@@ -176,7 +202,16 @@ class HomeView extends GetWidget<HomeController> {
                                                     print(path);
                                                     GallerySaver.saveImage(path)
                                                         .then((value) {
-                                                      print("Success");
+                                                      Fluttertoast.showToast(
+                                                          msg: "Success!",
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          timeInSecForIosWeb: 1,
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 16.0);
                                                     });
                                                   } else {
                                                     String path = dailyThought
@@ -185,7 +220,16 @@ class HomeView extends GetWidget<HomeController> {
                                                     print(path);
                                                     GallerySaver.saveVideo(path)
                                                         .then((value) {
-                                                      print("Success");
+                                                      Fluttertoast.showToast(
+                                                          msg: "Success!",
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          timeInSecForIosWeb: 1,
+                                                          textColor:
+                                                              Colors.white,
+                                                          fontSize: 16.0);
                                                     });
                                                   }
                                                 },
@@ -313,6 +357,10 @@ class HomeView extends GetWidget<HomeController> {
                                               arguments: {
                                                 ArgumentConstant.post:
                                                     dataModel,
+                                                ArgumentConstant.isFromHome:
+                                                    true,
+                                                ArgumentConstant.isFromLike:
+                                                    false,
                                               });
                                         },
                                         child: Stack(

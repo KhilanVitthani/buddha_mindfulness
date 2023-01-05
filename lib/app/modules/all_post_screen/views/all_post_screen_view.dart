@@ -26,6 +26,15 @@ class AllPostScreenView extends GetView<AllPostScreenController> {
                 fontWeight: FontWeight.w700,
                 fontSize: MySize.getHeight(26))),
         centerTitle: true,
+        leading: GestureDetector(
+          onTap: () async {
+            Get.offAllNamed(Routes.HOME);
+          },
+          child: Container(
+            padding: EdgeInsets.only(left: MySize.getWidth(10)),
+            child: Icon(Icons.arrow_back, color: appTheme.primaryTheme),
+          ),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -75,6 +84,8 @@ class AllPostScreenView extends GetView<AllPostScreenController> {
                                       Get.offAndToNamed(Routes.SHOW_POST_PAGE,
                                           arguments: {
                                             ArgumentConstant.post: dataModel,
+                                            ArgumentConstant.isFromHome: false,
+                                            ArgumentConstant.isFromLike: false,
                                           });
                                     },
                                     child: Stack(

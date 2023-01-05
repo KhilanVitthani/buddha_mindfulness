@@ -13,11 +13,14 @@ class ShowPostPageController extends GetxController {
   dailyThoughtModel? postData;
   VideoPlayerController? videoPlayerController;
   Rx<FlickManager>? flickManager;
-
+  RxBool isFromHome = false.obs;
+  RxBool isFromLike = false.obs;
   @override
   void onInit() {
     if (Get.arguments != null) {
       postData = Get.arguments[ArgumentConstant.post];
+      isFromHome.value = Get.arguments[ArgumentConstant.isFromHome];
+      isFromLike.value = Get.arguments[ArgumentConstant.isFromLike];
       print(postData!.videoThumbnail);
     }
     if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
