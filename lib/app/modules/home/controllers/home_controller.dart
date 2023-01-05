@@ -5,6 +5,8 @@ import 'package:video_player/video_player.dart';
 import '../../../models/data_model.dart';
 
 class HomeController extends GetxController {
+  RxBool isSave = false.obs;
+  RxBool isLike = false.obs;
   RxList<DataModel> postList = RxList<DataModel>([]);
   @override
   void onInit() {

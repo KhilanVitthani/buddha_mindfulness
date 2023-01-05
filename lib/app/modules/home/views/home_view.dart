@@ -1,5 +1,6 @@
 import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/app/models/data_model.dart';
+import 'package:buddha_mindfulness/app/models/save_model.dart';
 import 'package:buddha_mindfulness/app/routes/app_pages.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/color_constant.dart';
@@ -18,6 +19,7 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
@@ -39,7 +41,7 @@ class HomeView extends GetWidget<HomeController> {
             ),
             Container(
               height: MySize.getHeight(400),
-              child: StreamBuilder<QuerySnapshot>(
+              child: StreamBuilder<DocumentSnapshot<Object?>>(
                 builder: (context, data) {
                   if (data.connectionState == ConnectionState.waiting) {
                     print("object");
@@ -65,9 +67,7 @@ class HomeView extends GetWidget<HomeController> {
                               itemBuilder: (context, index) {
                                 dailyThoughtModel dailyThought =
                                     dailyThoughtModel.fromJson(
-                                  data.data!
-                                      .docs[data.data!.docs.length - index - 1]
-                                      .data() as Map<String, dynamic>,
+                                  data.data!.data() as Map<String, dynamic>,
                                 );
                                 print(DateTime.now());
                                 print(dailyThought.mediaLink);
@@ -82,8 +82,8 @@ class HomeView extends GetWidget<HomeController> {
                                             child: (dailyThought.isVideo!)
                                                 ? Container()
                                                 : getImageByLink(
-                                                    url: dailyThought
-                                                        .videoThumbnail!,
+                                                    url:
+                                                        dailyThought.mediaLink!,
                                                     height:
                                                         MySize.getHeight(325),
                                                     width: MySize.getWidth(320),
@@ -96,9 +96,23 @@ class HomeView extends GetWidget<HomeController> {
                                               SizedBox(
                                                 width: MySize.getWidth(14),
                                               ),
-                                              SvgPicture.asset(
-                                                imagePath + "like.svg",
-                                                height: MySize.getHeight(22.94),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller.isLike.value =
+                                                      !controller.isLike.value;
+                                                  FireController().LikeQuote(
+                                                      status: controller
+                                                          .isLike.value);
+                                                },
+                                                child: (dailyThought.isLike ==
+                                                        true)
+                                                    ? Icon(Icons.ac_unit)
+                                                    : SvgPicture.asset(
+                                                        imagePath + "like.svg",
+                                                        height:
+                                                            MySize.getHeight(
+                                                                22.94),
+                                                      ),
                                               ),
                                               SizedBox(
                                                 width: MySize.getWidth(25),
@@ -115,9 +129,39 @@ class HomeView extends GetWidget<HomeController> {
                                                 height: MySize.getHeight(22.94),
                                               ),
                                               Spacer(),
-                                              SvgPicture.asset(
-                                                imagePath + "save.svg",
-                                                height: MySize.getHeight(22.94),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller.isSave.value =
+                                                      !controller.isSave.value;
+                                                  FireController().saveQuote(
+                                                      status: controller
+                                                          .isSave.value);
+                                                  if (dailyThought.isSave ==
+                                                      true) {
+                                                    FireController().addSaveDataToFireStore(
+                                                        saveThoughtModel: SaveThoughtModel(
+                                                            mediaLink:
+                                                                dailyThought
+                                                                    .mediaLink
+                                                                    .toString(),
+                                                            videoThumbnail:
+                                                                dailyThought
+                                                                    .videoThumbnail
+                                                                    .toString(),
+                                                            uId: dailyThought
+                                                                .uId
+                                                                .toString()));
+                                                  }
+                                                },
+                                                child: (dailyThought.isSave ==
+                                                        true)
+                                                    ? Icon(Icons.save)
+                                                    : SvgPicture.asset(
+                                                        imagePath + "save.svg",
+                                                        height:
+                                                            MySize.getHeight(
+                                                                22.94),
+                                                      ),
                                               ),
                                               SizedBox(
                                                 width: MySize.getWidth(20),
