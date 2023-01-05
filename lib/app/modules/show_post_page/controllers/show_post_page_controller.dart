@@ -43,7 +43,9 @@ class ShowPostPageController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    flickManager!.value.dispose();
+    if (postData!.isVideo!) {
+      flickManager!.value.dispose();
+    }
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 }

@@ -6,11 +6,14 @@ import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/color_constant.dart';
 import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../constants/firebase_controller.dart';
@@ -39,9 +42,8 @@ class HomeView extends GetWidget<HomeController> {
                     color: appTheme.primaryTheme),
               ),
             ),
-            Container(
-              height: MySize.getHeight(400),
-              child: StreamBuilder<DocumentSnapshot<Object?>>(
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
                 builder: (context, data) {
                   if (data.connectionState == ConnectionState.waiting) {
                     print("object");
@@ -67,10 +69,20 @@ class HomeView extends GetWidget<HomeController> {
                               itemBuilder: (context, index) {
                                 dailyThoughtModel dailyThought =
                                     dailyThoughtModel.fromJson(
-                                  data.data!.data() as Map<String, dynamic>,
+                                  data.data!
+                                      .docs[data.data!.docs.length - index - 1]
+                                      .data() as Map<String, dynamic>,
                                 );
                                 print(DateTime.now());
                                 print(dailyThought.mediaLink);
+                                if (!isNullEmptyOrFalse(
+                                    dailyThought.videoThumbnail)) {
+                                  controller.flickManager = FlickManager(
+                                    videoPlayerController:
+                                        VideoPlayerController.network(
+                                            dailyThought.mediaLink!),
+                                  ).obs;
+                                }
                                 return GestureDetector(
                                   onTap: () {},
                                   child: Padding(
@@ -78,9 +90,29 @@ class HomeView extends GetWidget<HomeController> {
                                         horizontal: MySize.getWidth(15)),
                                     child: Column(
                                       children: [
-                                        Container(
-                                            child: (dailyThought.isVideo!)
-                                                ? Container()
+                                        Expanded(
+                                            child: (!isNullEmptyOrFalse(
+                                                    dailyThought
+                                                        .videoThumbnail))
+                                                ? SizedBox(
+                                                    child: Container(
+                                                      color: Colors.black,
+                                                      height:
+                                                          MySize.getHeight(466),
+                                                      child: FlickVideoPlayer(
+                                                          flickVideoWithControls:
+                                                              FlickVideoWithControls(
+                                                            videoFit: BoxFit
+                                                                .fitHeight,
+                                                            controls:
+                                                                FlickPortraitControls(),
+                                                          ),
+                                                          flickManager:
+                                                              controller
+                                                                  .flickManager!
+                                                                  .value),
+                                                    ),
+                                                  )
                                                 : getImageByLink(
                                                     url:
                                                         dailyThought.mediaLink!,
@@ -97,75 +129,60 @@ class HomeView extends GetWidget<HomeController> {
                                                 width: MySize.getWidth(14),
                                               ),
                                               GestureDetector(
-                                                onTap: () {
-                                                  controller.isLike.value =
-                                                      !controller.isLike.value;
-                                                  FireController().LikeQuote(
-                                                      status: controller
-                                                          .isLike.value);
-                                                },
-                                                child: (dailyThought.isLike ==
-                                                        true)
-                                                    ? Icon(Icons.ac_unit)
-                                                    : SvgPicture.asset(
-                                                        imagePath + "like.svg",
-                                                        height:
-                                                            MySize.getHeight(
-                                                                22.94),
-                                                      ),
+                                                onTap: () {},
+                                                child: SvgPicture.asset(
+                                                  imagePath + "like.svg",
+                                                  height:
+                                                      MySize.getHeight(22.94),
+                                                ),
                                               ),
                                               SizedBox(
                                                 width: MySize.getWidth(25),
                                               ),
-                                              SvgPicture.asset(
-                                                imagePath + "down.svg",
-                                                height: MySize.getHeight(22.94),
-                                              ),
-                                              SizedBox(
-                                                width: MySize.getWidth(25),
-                                              ),
-                                              SvgPicture.asset(
-                                                imagePath + "share.svg",
-                                                height: MySize.getHeight(22.94),
-                                              ),
-                                              Spacer(),
                                               GestureDetector(
                                                 onTap: () {
-                                                  controller.isSave.value =
-                                                      !controller.isSave.value;
-                                                  FireController().saveQuote(
-                                                      status: controller
-                                                          .isSave.value);
-                                                  if (dailyThought.isSave ==
-                                                      true) {
-                                                    FireController().addSaveDataToFireStore(
-                                                        saveThoughtModel: SaveThoughtModel(
-                                                            mediaLink:
-                                                                dailyThought
-                                                                    .mediaLink
-                                                                    .toString(),
-                                                            videoThumbnail:
-                                                                dailyThought
-                                                                    .videoThumbnail
-                                                                    .toString(),
-                                                            uId: dailyThought
-                                                                .uId
-                                                                .toString()));
+                                                  if (isNullEmptyOrFalse(
+                                                      dailyThought
+                                                          .videoThumbnail)) {
+                                                    String path = dailyThought
+                                                        .mediaLink
+                                                        .toString();
+                                                    print(path);
+                                                    GallerySaver.saveImage(path)
+                                                        .then((value) {
+                                                      print("Success");
+                                                    });
+                                                  } else {
+                                                    String path = dailyThought
+                                                        .mediaLink
+                                                        .toString();
+                                                    print(path);
+                                                    GallerySaver.saveVideo(path)
+                                                        .then((value) {
+                                                      print("Success");
+                                                    });
                                                   }
                                                 },
-                                                child: (dailyThought.isSave ==
-                                                        true)
-                                                    ? Icon(Icons.save)
-                                                    : SvgPicture.asset(
-                                                        imagePath + "save.svg",
-                                                        height:
-                                                            MySize.getHeight(
-                                                                22.94),
-                                                      ),
+                                                child: SvgPicture.asset(
+                                                  imagePath + "down.svg",
+                                                  height:
+                                                      MySize.getHeight(22.94),
+                                                ),
                                               ),
                                               SizedBox(
-                                                width: MySize.getWidth(20),
-                                              )
+                                                width: MySize.getWidth(25),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Share.share(
+                                                      dailyThought.mediaLink!);
+                                                },
+                                                child: SvgPicture.asset(
+                                                  imagePath + "share.svg",
+                                                  height:
+                                                      MySize.getHeight(22.94),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         )
@@ -185,93 +202,142 @@ class HomeView extends GetWidget<HomeController> {
                 stream: FireController().getDailyThought(),
               ),
             ),
-            SizedBox(
-              height: MySize.getHeight(8),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: MySize.getWidth(10)),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Recent",
+                        style: GoogleFonts.lato(
+                            fontSize: MySize.getHeight(18),
+                            color: appTheme.textGrayColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Spacer(),
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              "view all",
+                              style: GoogleFonts.lato(
+                                fontSize: MySize.getHeight(15),
+                                fontWeight: FontWeight.w400,
+                                color: appTheme.textGrayColor,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_outlined,
+                              color: appTheme.textGrayColor,
+                              size: MySize.getHeight(15),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: MySize.getHeight(268),
+                    child: StreamBuilder<QuerySnapshot>(
+                      builder: (context, data) {
+                        if (data.connectionState == ConnectionState.waiting) {
+                          print("object");
+                          return Center(child: CircularProgressIndicator());
+                        } else if (data.hasError) {
+                          print("object");
+                          return Text(
+                            "Error",
+                            style: TextStyle(color: Colors.amber),
+                          );
+                        } else {
+                          data.data!.docs.forEach((element) {});
+
+                          print("Data:-${data.data!}");
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            crossAxisSpacing:
+                                                MySize.getHeight(2),
+                                            mainAxisSpacing:
+                                                MySize.getHeight(2)),
+                                    itemBuilder: (context, index) {
+                                      DataModel dataModel = DataModel.fromJson(
+                                        data
+                                            .data!
+                                            .docs[data.data!.docs.length -
+                                                index -
+                                                1]
+                                            .data() as Map<String, dynamic>,
+                                      );
+                                      print(DateTime.now()
+                                          .microsecondsSinceEpoch);
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Get.offAndToNamed(
+                                              Routes.SHOW_POST_PAGE,
+                                              arguments: {
+                                                ArgumentConstant.post:
+                                                    dataModel,
+                                              });
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                                height: MySize.safeHeight,
+                                                width: MySize.safeWidth,
+                                                color: Colors.black,
+                                                child: getImageByLink(
+                                                    url: (dataModel.isVideo!)
+                                                        ? dataModel
+                                                            .videoThumbnail
+                                                            .toString()
+                                                        : dataModel.mediaLink
+                                                            .toString(),
+                                                    height:
+                                                        MySize.getHeight(25),
+                                                    width: MySize.getWidth(25),
+                                                    boxFit: BoxFit.cover)),
+                                            (dataModel.isVideo!)
+                                                ? Positioned(
+                                                    top: MySize.getHeight(10),
+                                                    right: MySize.getHeight(10),
+                                                    child: Container(
+                                                      child: SvgPicture.asset(
+                                                          imagePath +
+                                                              "video.svg",
+                                                          color: Colors.white),
+                                                      height: 25,
+                                                      width: 25,
+                                                    ),
+                                                  )
+                                                : SizedBox(),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    itemCount: data.data!.docs.length,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                      stream: FireController().getPost(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            // Expanded(
-            //   flex: 2,
-            //   child: StreamBuilder<QuerySnapshot>(
-            //     builder: (context, data) {
-            //       if (data.connectionState == ConnectionState.waiting) {
-            //         print("object");
-            //         return Center(child: CircularProgressIndicator());
-            //       } else if (data.hasError) {
-            //         print("object");
-            //         return Text(
-            //           "Error",
-            //           style: TextStyle(color: Colors.amber),
-            //         );
-            //       } else {
-            //         data.data!.docs.forEach((element) {});
-            //
-            //         print("Data:-${data.data!}");
-            //         return Column(
-            //           children: [
-            //             Expanded(
-            //               child: Container(
-            //                 child: GridView.builder(
-            //                   gridDelegate:
-            //                       SliverGridDelegateWithFixedCrossAxisCount(
-            //                           crossAxisCount: 2,
-            //                           crossAxisSpacing: MySize.getHeight(10.0),
-            //                           mainAxisSpacing: MySize.getHeight(10.0)),
-            //                   itemBuilder: (context, index) {
-            //                     DataModel dataModel = DataModel.fromJson(
-            //                       data.data!
-            //                           .docs[data.data!.docs.length - index - 1]
-            //                           .data() as Map<String, dynamic>,
-            //                     );
-            //                     print(DateTime.now().microsecondsSinceEpoch);
-            //                     return GestureDetector(
-            //                       onTap: () {
-            //                         Get.offAndToNamed(Routes.SHOW_POST_PAGE,
-            //                             arguments: {
-            //                               ArgumentConstant.post: dataModel,
-            //                             });
-            //                       },
-            //                       child: Stack(
-            //                         children: [
-            //                           Container(
-            //                               height: MySize.safeHeight,
-            //                               width: MySize.safeWidth,
-            //                               color: Colors.black,
-            //                               child: getImageByLink(
-            //                                   url: (dataModel.isVideo!)
-            //                                       ? dataModel.videoThumbnail
-            //                                           .toString()
-            //                                       : dataModel.mediaLink
-            //                                           .toString(),
-            //                                   height: MySize.getHeight(25),
-            //                                   width: MySize.getWidth(25),
-            //                                   boxFit: BoxFit.contain)),
-            //                           (dataModel.isVideo!)
-            //                               ? Positioned(
-            //                                   top: MySize.getHeight(10),
-            //                                   right: MySize.getHeight(10),
-            //                                   child: Container(
-            //                                     child: SvgPicture.asset(
-            //                                         imagePath + "video.svg",
-            //                                         color: Colors.white),
-            //                                     height: 25,
-            //                                     width: 25,
-            //                                   ),
-            //                                 )
-            //                               : SizedBox(),
-            //                         ],
-            //                       ),
-            //                     );
-            //                   },
-            //                   itemCount: data.data!.docs.length,
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         );
-            //       }
-            //     },
-            //     stream: FireController().getPost(),
-            //   ),
-            // ),
+            SizedBox(
+              height: MySize.getHeight(20),
+            )
           ],
         ),
       ),

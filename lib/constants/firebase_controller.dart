@@ -16,22 +16,22 @@ class FireController {
     return _postCollectionReferance.snapshots();
   }
 
-  Stream<DocumentSnapshot<Object?>> getDailyThought() {
+  Stream<QuerySnapshot> getDailyThought() {
     print('getMessage');
     return _dailyThoughtCollectionReferance
-        .doc("BUXYdCGt0NvWtJ6enN8y")
+        .orderBy("dateTime", descending: false)
         .snapshots();
   }
 
-  Future<void> saveQuote({required bool status}) async {
+  Future<void> saveQuote({required bool status, required String Uid}) async {
     return await _dailyThoughtCollectionReferance
-        .doc("BUXYdCGt0NvWtJ6enN8y")
+        .doc(Uid)
         .update({"isSave": status});
   }
 
-  Future<void> LikeQuote({required bool status}) async {
+  Future<void> LikeQuote({required bool status, required String Uid}) async {
     return await _dailyThoughtCollectionReferance
-        .doc("BUXYdCGt0NvWtJ6enN8y")
+        .doc(Uid)
         .update({"isLike": status});
   }
 
@@ -40,5 +40,12 @@ class FireController {
     return await _saveThoughtCollectionReferance
         .doc(saveThoughtModel.uId.toString())
         .set(saveThoughtModel.toJson());
+  }
+
+  Future<void> removeSaveDataToFireStore(
+      {required SaveThoughtModel saveThoughtModel}) async {
+    return await _saveThoughtCollectionReferance
+        .doc(saveThoughtModel.uId.toString())
+        .delete();
   }
 }
