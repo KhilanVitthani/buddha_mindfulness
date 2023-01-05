@@ -267,7 +267,8 @@ class HomeView extends GetWidget<HomeController> {
                                             mainAxisSpacing:
                                                 MySize.getHeight(2)),
                                     itemBuilder: (context, index) {
-                                      DataModel dataModel = DataModel.fromJson(
+                                      dailyThoughtModel dataModel =
+                                          dailyThoughtModel.fromJson(
                                         data
                                             .data!
                                             .docs[data.data!.docs.length -
@@ -293,7 +294,9 @@ class HomeView extends GetWidget<HomeController> {
                                                 width: MySize.safeWidth,
                                                 color: Colors.black,
                                                 child: getImageByLink(
-                                                    url: (dataModel.isVideo!)
+                                                    url: (!isNullEmptyOrFalse(
+                                                            dataModel
+                                                                .videoThumbnail))
                                                         ? dataModel
                                                             .videoThumbnail
                                                             .toString()
@@ -303,7 +306,8 @@ class HomeView extends GetWidget<HomeController> {
                                                         MySize.getHeight(25),
                                                     width: MySize.getWidth(25),
                                                     boxFit: BoxFit.cover)),
-                                            (dataModel.isVideo!)
+                                            (!isNullEmptyOrFalse(
+                                                    dataModel.videoThumbnail))
                                                 ? Positioned(
                                                     top: MySize.getHeight(10),
                                                     right: MySize.getHeight(10),

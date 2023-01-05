@@ -1,3 +1,4 @@
+import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -5,10 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../constants/sizeConstant.dart';
 import '../../../models/data_model.dart';
 
 class ShowPostPageController extends GetxController {
-  DataModel? postData;
+  dailyThoughtModel? postData;
   VideoPlayerController? videoPlayerController;
   Rx<FlickManager>? flickManager;
 
@@ -18,7 +20,7 @@ class ShowPostPageController extends GetxController {
       postData = Get.arguments[ArgumentConstant.post];
       print(postData!.videoThumbnail);
     }
-    if (postData!.isVideo!) {
+    if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
       final videoPlayerController =
           VideoPlayerController.network(postData!.mediaLink!);
 
@@ -43,7 +45,7 @@ class ShowPostPageController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    if (postData!.isVideo!) {
+    if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
       flickManager!.value.dispose();
     }
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

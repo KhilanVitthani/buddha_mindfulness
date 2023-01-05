@@ -40,7 +40,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  (controller.postData!.isVideo!)
+                  (!isNullEmptyOrFalse(controller.postData!.videoThumbnail))
                       ? Container(
                           child: (controller.flickManager == null)
                               ? Center(
