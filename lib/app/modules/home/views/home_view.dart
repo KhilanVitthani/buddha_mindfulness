@@ -78,191 +78,172 @@ class HomeView extends GetWidget<HomeController> {
                     return Column(
                       children: [
                         Expanded(
-                          child: Container(
-                            child: GridView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1,
-                                      crossAxisSpacing: MySize.getHeight(10.0),
-                                      mainAxisSpacing: MySize.getHeight(10.0)),
-                              itemBuilder: (context, index) {
-                                dailyThoughtModel dailyThought =
-                                    dailyThoughtModel.fromJson(
-                                  data.data!
-                                      .docs[data.data!.docs.length - index - 1]
-                                      .data() as Map<String, dynamic>,
-                                );
-                                if (controller.likeList
-                                    .contains(dailyThought.uId!)) {
-                                  dailyThought.isLiked!.value = true;
-                                }
-                                print(DateTime.now());
-                                print(dailyThought.mediaLink);
-                                if (!isNullEmptyOrFalse(
-                                    dailyThought.videoThumbnail)) {
-                                  controller.flickManager = FlickManager(
-                                    videoPlayerController:
-                                        VideoPlayerController.network(
-                                            dailyThought.mediaLink!),
-                                  ).obs;
-                                }
+                          child: GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1,
+                                    crossAxisSpacing: MySize.getHeight(10.0),
+                                    mainAxisSpacing: MySize.getHeight(10.0)),
+                            itemBuilder: (context, index) {
+                              dailyThoughtModel dailyThought =
+                                  dailyThoughtModel.fromJson(
+                                data.data!
+                                    .docs[data.data!.docs.length - index - 1]
+                                    .data() as Map<String, dynamic>,
+                              );
+                              if (controller.likeList
+                                  .contains(dailyThought.uId!)) {
+                                dailyThought.isLiked!.value = true;
+                              }
+                              print(DateTime.now());
+                              print(dailyThought.mediaLink);
+                              if (!isNullEmptyOrFalse(
+                                  dailyThought.videoThumbnail)) {
+                                controller.flickManager = FlickManager(
+                                  videoPlayerController:
+                                      VideoPlayerController.network(
+                                          dailyThought.mediaLink!),
+                                ).obs;
+                              }
 
-                                return GestureDetector(
-                                  onTap: () {},
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: MySize.getWidth(15)),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                            child: (!isNullEmptyOrFalse(
-                                                    dailyThought
-                                                        .videoThumbnail))
-                                                ? SizedBox(
-                                                    child: Container(
-                                                      color: Colors.black,
-                                                      height:
-                                                          MySize.getHeight(466),
-                                                      child: FlickVideoPlayer(
-                                                          flickVideoWithControls:
-                                                              FlickVideoWithControls(
-                                                            videoFit: BoxFit
-                                                                .fitHeight,
-                                                            controls:
-                                                                FlickPortraitControls(),
-                                                          ),
-                                                          flickManager:
-                                                              controller
-                                                                  .flickManager!
-                                                                  .value),
-                                                    ),
-                                                  )
-                                                : getImageByLink(
-                                                    url:
-                                                        dailyThought.mediaLink!,
-                                                    height:
-                                                        MySize.getHeight(325),
-                                                    width: MySize.getWidth(320),
-                                                    boxFit: BoxFit.contain)),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              top: MySize.getHeight(15.75)),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: MySize.getWidth(14),
-                                              ),
-                                              Obx(() {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    dailyThought.isLiked!
-                                                        .toggle();
-                                                    if (dailyThought
-                                                        .isLiked!.isTrue) {
-                                                      controller.addDataToLike(
-                                                          data: dailyThought
-                                                              .uId!);
-                                                    } else {
-                                                      controller
-                                                          .removeDataToLike(
-                                                              data: dailyThought
-                                                                  .uId!);
-                                                    }
-                                                  },
-                                                  child: (dailyThought
-                                                          .isLiked!.isTrue)
-                                                      ? SvgPicture.asset(
-                                                          imagePath +
-                                                              "likeFill.svg",
-                                                          height:
-                                                              MySize.getHeight(
-                                                                  22.94),
-                                                        )
-                                                      : SvgPicture.asset(
-                                                          imagePath +
-                                                              "like.svg",
-                                                          height:
-                                                              MySize.getHeight(
-                                                                  22.94),
-                                                        ),
-                                                );
-                                              }),
-                                              SizedBox(
-                                                width: MySize.getWidth(25),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  if (isNullEmptyOrFalse(
-                                                      dailyThought
-                                                          .videoThumbnail)) {
-                                                    String path = dailyThought
-                                                        .mediaLink
-                                                        .toString();
-                                                    print(path);
-                                                    GallerySaver.saveImage(path)
-                                                        .then((value) {
-                                                      Fluttertoast.showToast(
-                                                          msg: "Success!",
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .BOTTOM,
-                                                          timeInSecForIosWeb: 1,
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 16.0);
-                                                    });
-                                                  } else {
-                                                    String path = dailyThought
-                                                        .mediaLink
-                                                        .toString();
-                                                    print(path);
-                                                    GallerySaver.saveVideo(path)
-                                                        .then((value) {
-                                                      Fluttertoast.showToast(
-                                                          msg: "Success!",
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .BOTTOM,
-                                                          timeInSecForIosWeb: 1,
-                                                          textColor:
-                                                              Colors.white,
-                                                          fontSize: 16.0);
-                                                    });
-                                                  }
-                                                },
-                                                child: SvgPicture.asset(
-                                                  imagePath + "down.svg",
-                                                  height:
-                                                      MySize.getHeight(22.94),
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: MySize.getWidth(15)),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: (!isNullEmptyOrFalse(
+                                                dailyThought.videoThumbnail))
+                                            ? SizedBox(
+                                                child: Container(
+                                                  color: Colors.black,
+                                                  height: MySize.getHeight(466),
+                                                  child: FlickVideoPlayer(
+                                                      flickVideoWithControls:
+                                                          FlickVideoWithControls(
+                                                        videoFit:
+                                                            BoxFit.fitHeight,
+                                                        controls:
+                                                            FlickPortraitControls(),
+                                                      ),
+                                                      flickManager: controller
+                                                          .flickManager!.value),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: MySize.getWidth(25),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Share.share(
-                                                      dailyThought.mediaLink!);
-                                                },
-                                                child: SvgPicture.asset(
-                                                  imagePath + "share.svg",
-                                                  height:
-                                                      MySize.getHeight(22.94),
-                                                ),
-                                              ),
-                                            ],
+                                              )
+                                            : getImageByLink(
+                                                url: dailyThought.mediaLink!,
+                                                height: MySize.getHeight(325),
+                                                width: MySize.getWidth(320),
+                                                boxFit: BoxFit.contain),
+                                      ),
+                                      SizedBox(
+                                        height: MySize.getHeight(5),
+                                      ),
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            width: MySize.getWidth(14),
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                          Obx(() {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                dailyThought.isLiked!.toggle();
+                                                if (dailyThought
+                                                    .isLiked!.isTrue) {
+                                                  controller.addDataToLike(
+                                                      data: dailyThought.uId!);
+                                                } else {
+                                                  controller.removeDataToLike(
+                                                      data: dailyThought.uId!);
+                                                }
+                                              },
+                                              child: (dailyThought
+                                                      .isLiked!.isTrue)
+                                                  ? SvgPicture.asset(
+                                                      imagePath +
+                                                          "likeFill.svg",
+                                                      height: MySize.getHeight(
+                                                          22.94),
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      imagePath + "like.svg",
+                                                      height: MySize.getHeight(
+                                                          22.94),
+                                                    ),
+                                            );
+                                          }),
+                                          SizedBox(
+                                            width: MySize.getWidth(25),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (isNullEmptyOrFalse(
+                                                  dailyThought
+                                                      .videoThumbnail)) {
+                                                String path = dailyThought
+                                                    .mediaLink
+                                                    .toString();
+                                                print(path);
+                                                GallerySaver.saveImage(path)
+                                                    .then((value) {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Success!",
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                });
+                                              } else {
+                                                String path = dailyThought
+                                                    .mediaLink
+                                                    .toString();
+                                                print(path);
+                                                GallerySaver.saveVideo(path)
+                                                    .then((value) {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Success!",
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                });
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              imagePath + "down.svg",
+                                              height: MySize.getHeight(22.94),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: MySize.getWidth(25),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Share.share(
+                                                  dailyThought.mediaLink!);
+                                            },
+                                            child: SvgPicture.asset(
+                                              imagePath + "share.svg",
+                                              height: MySize.getHeight(22.94),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                );
-                              },
-                              itemCount: 1,
-                            ),
+                                ),
+                              );
+                            },
+                            itemCount: 1,
                           ),
                         ),
                       ],
@@ -273,7 +254,10 @@ class HomeView extends GetWidget<HomeController> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: MySize.getWidth(10)),
+              padding: EdgeInsets.only(
+                  left: MySize.getWidth(10),
+                  right: MySize.getWidth(10),
+                  top: MySize.getHeight(5)),
               child: Column(
                 children: [
                   Row(
@@ -311,6 +295,9 @@ class HomeView extends GetWidget<HomeController> {
                         ),
                       )
                     ],
+                  ),
+                  Spacing.height(
+                    MySize.getHeight(10),
                   ),
                   Container(
                     height: MySize.getHeight(268),
@@ -416,7 +403,7 @@ class HomeView extends GetWidget<HomeController> {
               ),
             ),
             SizedBox(
-              height: MySize.getHeight(20),
+              height: MySize.getHeight(10),
             )
           ],
         ),

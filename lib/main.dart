@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +18,8 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.removeAfter(afterInit);
   runApp(
     GetMaterialApp(
       theme: ThemeData(
@@ -28,4 +31,8 @@ void main() async {
       getPages: AppPages.routes,
     ),
   );
+}
+
+Future<void> afterInit(_) async {
+  await Future.delayed(Duration(microseconds: 1));
 }

@@ -21,7 +21,7 @@ class FireController {
   Stream<QuerySnapshot> getDailyThought() {
     print('getMessage');
     return _dailyThoughtCollectionReferance
-        .orderBy("dateTime", descending: true)
+        .orderBy("dateTime", descending: false)
         .snapshots();
   }
 
