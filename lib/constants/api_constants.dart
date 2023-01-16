@@ -7,6 +7,7 @@ const feedBackEmail = "mobileappxperts3@gmail.com";
 
 class ArgumentConstant {
   static const post = "post";
+  static const index = "index";
   static const likeList = "likeList";
   static const isFromHome = "isFromHome";
   static const isFromLike = "isFromLike";

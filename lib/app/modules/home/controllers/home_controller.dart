@@ -11,8 +11,7 @@ import '../../../models/data_model.dart';
 class HomeController extends GetxController {
   RxBool isSave = false.obs;
   RxBool isLike = false.obs;
-  RxList<dailyThoughtModel> postList = RxList<dailyThoughtModel>([]);
-  // RxList<dailyThoughtModel> likeList = RxList<dailyThoughtModel>([]);
+  RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];
   Rx<FlickManager>? flickManager;
   RxString? deviceId = "".obs;

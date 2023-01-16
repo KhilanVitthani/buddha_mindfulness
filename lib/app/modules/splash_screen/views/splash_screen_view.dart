@@ -27,6 +27,12 @@ class SplashScreenView extends GetWidget<SplashScreenController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                imagePath + "icon.png",
+                height: MySize.getHeight(72),
+                width: MySize.getWidth(68),
+              ),
+              Spacing.height(MySize.getHeight(3)),
               Text(
                 "Quote",
                 style: TextStyle(

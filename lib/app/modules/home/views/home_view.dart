@@ -335,6 +335,12 @@ class HomeView extends GetWidget<HomeController> {
                                                 1]
                                             .data() as Map<String, dynamic>,
                                       );
+
+                                      controller.post.add(dataModel);
+                                      if (controller.likeList
+                                          .contains(dataModel.uId!)) {
+                                        dataModel.isLiked!.value = true;
+                                      }
                                       print(DateTime.now()
                                           .microsecondsSinceEpoch);
                                       return GestureDetector(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:chewie/chewie.dart';
@@ -7,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../constants/sizeConstant.dart';
+import '../../../../main.dart';
 import '../../../models/data_model.dart';
 
 class ShowPostPageController extends GetxController {
@@ -15,6 +18,8 @@ class ShowPostPageController extends GetxController {
   Rx<FlickManager>? flickManager;
   RxBool isFromHome = false.obs;
   RxBool isFromLike = false.obs;
+  List likeList = [];
+
   @override
   void onInit() {
     if (Get.arguments != null) {
@@ -32,6 +37,9 @@ class ShowPostPageController extends GetxController {
             VideoPlayerController.network(postData!.mediaLink!),
       ).obs;
     }
+    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    }
     super.onInit();
   }
 
@@ -43,6 +51,20 @@ class ShowPostPageController extends GetxController {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  addDataToLike({
+    required String data,
+  }) {
+    likeList.add(data);
+    box.write(ArgumentConstant.likeList, jsonEncode(likeList));
+    print(box.read(ArgumentConstant.likeList));
+  }
+
+  removeDataToLike({required String data}) {
+    likeList.remove(data);
+    box.write(ArgumentConstant.likeList, jsonEncode(likeList));
+    print(box.read(ArgumentConstant.likeList));
   }
 
   @override
