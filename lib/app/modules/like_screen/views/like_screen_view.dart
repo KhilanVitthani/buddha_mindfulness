@@ -111,6 +111,9 @@ class LikeScreenView extends GetView<LikeScreenController> {
                                     mainAxisSpacing: MySize.getHeight(2),
                                   ),
                                   itemBuilder: (context, index) {
+                                    controller.likePost.forEach((element) {
+                                      element.isLiked!.value = true;
+                                    });
                                     return GestureDetector(
                                       onTap: () {
                                         Get.offAndToNamed(Routes.SHOW_POST_PAGE,
