@@ -338,7 +338,7 @@ class HomeView extends GetWidget<HomeController> {
 
                                       controller.post.add(dataModel);
                                       if (controller.likeList
-                                          .contains(dataModel.uId!)) {
+                                          .contains(dataModel.uId)) {
                                         dataModel.isLiked!.value = true;
                                       }
                                       print(DateTime.now()
