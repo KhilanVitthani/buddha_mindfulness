@@ -140,7 +140,7 @@ class HomeView extends GetWidget<HomeController> {
                                                 boxFit: BoxFit.contain),
                                       ),
                                       SizedBox(
-                                        height: MySize.getHeight(5),
+                                        height: MySize.getHeight(9),
                                       ),
                                       Row(
                                         children: [
@@ -385,8 +385,28 @@ class HomeView extends GetWidget<HomeController> {
                                                           imagePath +
                                                               "video.svg",
                                                           color: Colors.white),
-                                                      height: 25,
-                                                      width: 25,
+                                                      height:
+                                                          MySize.getHeight(25),
+                                                      width:
+                                                          MySize.getWidth(25),
+                                                    ),
+                                                  )
+                                                : SizedBox(),
+                                            (!isNullEmptyOrFalse(
+                                                    dataModel.isLiked!.value))
+                                                ? Positioned(
+                                                    bottom:
+                                                        MySize.getHeight(10),
+                                                    right: MySize.getHeight(10),
+                                                    child: Container(
+                                                      child: SvgPicture.asset(
+                                                          imagePath +
+                                                              "likeFill.svg",
+                                                          color: Colors.white),
+                                                      height:
+                                                          MySize.getHeight(15),
+                                                      width:
+                                                          MySize.getWidth(15),
                                                     ),
                                                   )
                                                 : SizedBox(),

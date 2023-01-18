@@ -78,6 +78,10 @@ class AllPostScreenView extends GetView<AllPostScreenController> {
                                             data.data!.docs.length - index - 1]
                                         .data() as Map<String, dynamic>,
                                   );
+                                  if (controller.likeList
+                                      .contains(dataModel.uId!)) {
+                                    dataModel.isLiked!.value = true;
+                                  }
                                   print(DateTime.now().microsecondsSinceEpoch);
                                   return GestureDetector(
                                     onTap: () {
@@ -116,6 +120,21 @@ class AllPostScreenView extends GetView<AllPostScreenController> {
                                                       color: Colors.white),
                                                   height: 25,
                                                   width: 25,
+                                                ),
+                                              )
+                                            : SizedBox(),
+                                        (!isNullEmptyOrFalse(
+                                                dataModel.isLiked!.value))
+                                            ? Positioned(
+                                                bottom: MySize.getHeight(10),
+                                                right: MySize.getHeight(10),
+                                                child: Container(
+                                                  child: SvgPicture.asset(
+                                                      imagePath +
+                                                          "likeFill.svg",
+                                                      color: Colors.white),
+                                                  height: MySize.getHeight(15),
+                                                  width: MySize.getWidth(15),
                                                 ),
                                               )
                                             : SizedBox(),

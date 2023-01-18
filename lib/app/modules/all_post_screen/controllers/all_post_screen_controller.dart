@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 
-class AllPostScreenController extends GetxController {
-  //TODO: Implement AllPostScreenController
+import '../../../../constants/api_constants.dart';
+import '../../../../constants/sizeConstant.dart';
+import '../../../../main.dart';
 
-  final count = 0.obs;
+class AllPostScreenController extends GetxController {
+  List likeList = [];
+
   @override
   void onInit() {
+    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    }
     super.onInit();
   }
 
@@ -18,6 +26,4 @@ class AllPostScreenController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

@@ -100,73 +100,104 @@ class LikeScreenView extends GetView<LikeScreenController> {
                             controller.likePost.value =
                                 controller.post.reversed.toList();
                             return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                    child: GridView.builder(
-                                  itemCount: controller.likePost.length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: MySize.getHeight(2),
-                                    mainAxisSpacing: MySize.getHeight(2),
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    controller.likePost.forEach((element) {
-                                      element.isLiked!.value = true;
-                                    });
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Get.offAndToNamed(Routes.SHOW_POST_PAGE,
-                                            arguments: {
-                                              ArgumentConstant.post:
-                                                  controller.likePost[index],
-                                              ArgumentConstant.isFromHome:
-                                                  false,
-                                              ArgumentConstant.isFromLike: true,
-                                            });
-                                      },
-                                      child: Stack(
+                                (isNullEmptyOrFalse(controller.likePost))
+                                    ? Column(
                                         children: [
-                                          Container(
-                                              height: MySize.safeHeight,
-                                              width: MySize.safeWidth,
-                                              color: Colors.black,
-                                              child: getImageByLink(
-                                                  url: (!isNullEmptyOrFalse(
-                                                          controller
-                                                              .likePost[index]
-                                                              .videoThumbnail))
-                                                      ? controller
-                                                          .likePost[index]
-                                                          .videoThumbnail
-                                                          .toString()
-                                                      : controller
-                                                          .likePost[index]
-                                                          .mediaLink
-                                                          .toString(),
-                                                  height: MySize.getHeight(25),
-                                                  width: MySize.getWidth(25),
-                                                  boxFit: BoxFit.cover)),
-                                          (!isNullEmptyOrFalse(controller
-                                                  .likePost[index]
-                                                  .videoThumbnail))
-                                              ? Positioned(
-                                                  top: MySize.getHeight(10),
-                                                  right: MySize.getHeight(10),
-                                                  child: Container(
-                                                    child: SvgPicture.asset(
-                                                        imagePath + "video.svg",
-                                                        color: Colors.white),
-                                                    height: 25,
-                                                    width: 25,
-                                                  ),
-                                                )
-                                              : SizedBox(),
+                                          Center(
+                                              child: Image.asset(
+                                            imagePath + "nodata.png",
+                                            height: 100,
+                                            width: 100,
+                                          )),
+                                          Text(
+                                            "No Data Found",
+                                            style: TextStyle(
+                                                color: appTheme.primaryTheme,
+                                                fontWeight: FontWeight.w700),
+                                          ),
                                         ],
-                                      ),
-                                    );
-                                  },
-                                )),
+                                      )
+                                    : Expanded(
+                                        child: GridView.builder(
+                                        itemCount: controller.likePost.length,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: MySize.getHeight(2),
+                                          mainAxisSpacing: MySize.getHeight(2),
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          controller.likePost
+                                              .forEach((element) {
+                                            element.isLiked!.value = true;
+                                          });
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Get.offAndToNamed(
+                                                  Routes.SHOW_POST_PAGE,
+                                                  arguments: {
+                                                    ArgumentConstant.post:
+                                                        controller
+                                                            .likePost[index],
+                                                    ArgumentConstant.isFromHome:
+                                                        false,
+                                                    ArgumentConstant.isFromLike:
+                                                        true,
+                                                  });
+                                            },
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                    height: MySize.safeHeight,
+                                                    width: MySize.safeWidth,
+                                                    color: Colors.black,
+                                                    child: getImageByLink(
+                                                        url: (!isNullEmptyOrFalse(
+                                                                controller
+                                                                    .likePost[
+                                                                        index]
+                                                                    .videoThumbnail))
+                                                            ? controller
+                                                                .likePost[index]
+                                                                .videoThumbnail
+                                                                .toString()
+                                                            : controller
+                                                                .likePost[index]
+                                                                .mediaLink
+                                                                .toString(),
+                                                        height:
+                                                            MySize.getHeight(
+                                                                25),
+                                                        width:
+                                                            MySize.getWidth(25),
+                                                        boxFit: BoxFit.cover)),
+                                                (!isNullEmptyOrFalse(controller
+                                                        .likePost[index]
+                                                        .videoThumbnail))
+                                                    ? Positioned(
+                                                        top: MySize.getHeight(
+                                                            10),
+                                                        right: MySize.getHeight(
+                                                            10),
+                                                        child: Container(
+                                                          child: SvgPicture.asset(
+                                                              imagePath +
+                                                                  "video.svg",
+                                                              color:
+                                                                  Colors.white),
+                                                          height: 25,
+                                                          width: 25,
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      )),
                               ],
                             );
                           }
