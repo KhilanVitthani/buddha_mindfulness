@@ -12,7 +12,7 @@ import '../../../models/daily_thought_model.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/all_post_screen_controller.dart';
 
-class AllPostScreenView extends GetView<AllPostScreenController> {
+class AllPostScreenView extends GetWidget<AllPostScreenController> {
   const AllPostScreenView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -79,10 +79,11 @@ class AllPostScreenView extends GetView<AllPostScreenController> {
                                         .data() as Map<String, dynamic>,
                                   );
                                   if (controller.likeList
-                                      .contains(dataModel.uId!)) {
+                                      .contains(dataModel.uId)) {
                                     dataModel.isLiked!.value = true;
                                   }
-                                  print(DateTime.now().microsecondsSinceEpoch);
+                                  print(
+                                      "Data:=============${data.data!.docs.length}");
                                   return GestureDetector(
                                     onTap: () {
                                       Get.offAndToNamed(Routes.SHOW_POST_PAGE,

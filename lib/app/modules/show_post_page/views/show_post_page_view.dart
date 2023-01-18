@@ -99,15 +99,26 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                           alignment: Alignment.center,
                           width: MySize.getWidth(320),
                           height: MySize.getHeight(325),
-                          child: PinchZoom(
-                            child: getImageByLink(
-                                url: controller.postData!.mediaLink.toString(),
-                                height: MySize.getHeight(25),
-                                width: MySize.getWidth(25),
-                                boxFit: BoxFit.fill),
-                            resetDuration: const Duration(milliseconds: 100),
-                            maxScale: MySize.getHeight(5),
+                          child: ClipRRect(
+                            child: PhotoView.customChild(
+                              child: getImageByLink(
+                                  url:
+                                      controller.postData!.mediaLink.toString(),
+                                  height: MySize.getHeight(325),
+                                  width: MySize.getWidth(320),
+                                  boxFit: BoxFit.fill),
+                              initialScale: 1.0,
+                              enableRotation: false,
+                            ),
                           ),
+                          // child: PinchZoom(
+                          //   child: getImageByLink(
+                          //       url: controller.postData!.mediaLink.toString(),
+                          //       height: MySize.getHeight(25),
+                          //       width: MySize.getWidth(25),
+                          //       boxFit: BoxFit.fill),
+                          //   maxScale: MySize.getHeight(5),
+                          // ),
                         ),
                   SizedBox(
                     height: MySize.getHeight(25),
