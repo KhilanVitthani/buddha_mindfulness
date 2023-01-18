@@ -13,7 +13,9 @@ class LikeScreenController extends GetxController {
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   @override
   void onInit() {
-    likeList.value = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList)))
+      likeList.value =
+          (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
 
     super.onInit();
   }
