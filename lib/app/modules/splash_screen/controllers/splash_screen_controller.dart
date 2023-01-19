@@ -13,9 +13,10 @@ import '../../../../utilities/ad_service.dart';
 class SplashScreenController extends GetxController {
   @override
   void onInit() {
-    Timer(Duration(seconds: 3), () async {
-      await ads();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await time();
     });
+
     Yodo1MAS.instance.setInterstitialListener((event, message) {
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
@@ -32,6 +33,16 @@ class SplashScreenController extends GetxController {
       }
     });
     super.onInit();
+  }
+
+  time() async {
+    await Timer(Duration(seconds: 3), () async {
+      Future.delayed(Duration(seconds: 5)).then(
+        (value) async {
+          await ads();
+        },
+      );
+    });
   }
 
   ads() async {

@@ -5,8 +5,13 @@ import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:yodo1mas/Yodo1MAS.dart';
+
+import '../../../../utilities/ad_service.dart';
+import '../../../../utilities/timer_service.dart';
 
 class HomeController extends GetxController {
   RxBool isSave = false.obs;
@@ -20,7 +25,35 @@ class HomeController extends GetxController {
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
+    Yodo1MAS.instance.setInterstitialListener((event, message) {
+      switch (event) {
+        case Yodo1MAS.AD_EVENT_OPENED:
+          print('Interstitial AD_EVENT_OPENED');
+          break;
+        case Yodo1MAS.AD_EVENT_ERROR:
+          print('Interstitial AD_EVENT_ERROR' + message);
+          break;
+        case Yodo1MAS.AD_EVENT_CLOSED:
+          getIt<TimerService>().verifyTimer();
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          Get.back();
+          break;
+      }
+    });
     super.onInit();
+  }
+
+  ads() async {
+    await getIt<AdService>()
+        .getAd(adType: AdService.interstitialAd)
+        .then((value) {
+      if (!value) {
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        Get.back();
+      }
+    }).catchError((error) {
+      print("Error := $error");
+    });
   }
 
   addDataToLike({

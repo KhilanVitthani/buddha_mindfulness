@@ -137,10 +137,14 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                               controller.postData!.isLiked!.toggle();
                               if (controller.postData!.isLiked!.isTrue) {
                                 controller.addDataToLike(
-                                    data: controller.postData!.uId!);
+                                    data: controller.postData!.uId
+                                        .toString()
+                                        .trim());
                               } else {
                                 controller.removeDataToLike(
-                                    data: controller.postData!.uId!);
+                                    data: controller.postData!.uId
+                                        .toString()
+                                        .trim());
                               }
                             },
                             child: (controller.postData!.isLiked!.isTrue)

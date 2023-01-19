@@ -10,6 +10,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../../constants/sizeConstant.dart';
 import '../../../../main.dart';
+import '../../../../utilities/ad_service.dart';
 import '../../../models/data_model.dart';
 
 class ShowPostPageController extends GetxController {
@@ -29,9 +30,6 @@ class ShowPostPageController extends GetxController {
       print(postData!.videoThumbnail);
     }
     if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
-      final videoPlayerController =
-          VideoPlayerController.network(postData!.mediaLink!);
-
       flickManager = FlickManager(
         videoPlayerController:
             VideoPlayerController.network(postData!.mediaLink!),
