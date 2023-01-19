@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   RxBool isSave = false.obs;
   RxBool isLike = false.obs;
   RxBool isTaped = false.obs;
+  RxBool isVideo = false.obs;
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];
   Rx<FlickManager>? flickManager;
@@ -81,6 +82,9 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    if (isVideo.isTrue) {
+      flickManager!.value.dispose();
+    }
     super.onClose();
   }
 }

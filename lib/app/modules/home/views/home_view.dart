@@ -113,6 +113,7 @@ class HomeView extends GetWidget<HomeController> {
                                             dailyThought.mediaLink!),
                                     autoPlay: true,
                                   ).obs;
+                                  controller.isVideo.value = true;
                                 }
 
                                 return GestureDetector(
