@@ -56,7 +56,6 @@ class SplashScreenController extends GetxController {
     }).catchError((error) {
       print("Error := $error");
     });
-    getIt<TimerService>().verifyTimer();
   }
 
   @override

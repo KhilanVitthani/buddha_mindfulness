@@ -1,6 +1,7 @@
 import 'package:buddha_mindfulness/constants/color_constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
@@ -8,6 +9,9 @@ import 'package:get/get.dart';
 import '../../../../constants/api_constants.dart';
 import '../../../../constants/firebase_controller.dart';
 import '../../../../constants/sizeConstant.dart';
+import '../../../../main.dart';
+import '../../../../utilities/ad_service.dart';
+import '../../../../utilities/timer_service.dart';
 import '../../../models/daily_thought_model.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/like_screen_controller.dart';
@@ -18,7 +22,22 @@ class LikeScreenView extends GetView<LikeScreenController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.offAndToNamed(Routes.HOME);
+        if (getIt<TimerService>().is40SecCompleted) {
+          await getIt<AdService>()
+              .getAd(adType: AdService.interstitialAd)
+              .then((value) {
+            if (!value) {
+              getIt<TimerService>().verifyTimer();
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+              Get.offAllNamed(Routes.HOME);
+            }
+          });
+
+          return await false;
+        } else {
+          Get.offAllNamed(Routes.HOME);
+        }
         return await true;
       },
       child: Scaffold(
@@ -36,7 +55,21 @@ class LikeScreenView extends GetView<LikeScreenController> {
           ),
           leading: GestureDetector(
             onTap: () async {
-              Get.offAllNamed(Routes.HOME);
+              if (getIt<TimerService>().is40SecCompleted) {
+                await getIt<AdService>()
+                    .getAd(adType: AdService.interstitialAd)
+                    .then((value) {
+                  if (!value) {
+                    getIt<TimerService>().verifyTimer();
+                    SystemChrome.setEnabledSystemUIMode(
+                        SystemUiMode.edgeToEdge);
+
+                    Get.offAllNamed(Routes.HOME);
+                  }
+                });
+              } else {
+                Get.offAllNamed(Routes.HOME);
+              }
             },
             child: Container(
               padding: EdgeInsets.only(left: MySize.getWidth(10)),

@@ -2,6 +2,7 @@ import 'package:buddha_mindfulness/constants/color_constant.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -13,6 +14,9 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../constants/api_constants.dart';
 import '../../../../constants/sizeConstant.dart';
+import '../../../../main.dart';
+import '../../../../utilities/ad_service.dart';
+import '../../../../utilities/timer_service.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/show_post_page_controller.dart';
 
@@ -22,11 +26,28 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        (controller.isFromLike.isTrue)
-            ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-            : (controller.isFromHome.isTrue)
-                ? Get.offAllNamed(Routes.HOME)
-                : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+        if (getIt<TimerService>().is40SecCompleted) {
+          await getIt<AdService>()
+              .getAd(adType: AdService.interstitialAd)
+              .then((value) {
+            if (!value) {
+              getIt<TimerService>().verifyTimer();
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+              (controller.isFromLike.isTrue)
+                  ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                  : (controller.isFromHome.isTrue)
+                      ? Get.offAllNamed(Routes.HOME)
+                      : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+            }
+          });
+          return await false;
+        } else {
+          (controller.isFromLike.isTrue)
+              ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+              : (controller.isFromHome.isTrue)
+                  ? Get.offAllNamed(Routes.HOME)
+                  : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+        }
         return await true;
       },
       child: SafeArea(
@@ -45,11 +66,28 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
               centerTitle: true,
               leading: GestureDetector(
                 onTap: () async {
-                  (controller.isFromLike.isTrue)
-                      ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                      : (controller.isFromHome.isTrue)
-                          ? Get.offAllNamed(Routes.HOME)
-                          : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+                  if (getIt<TimerService>().is40SecCompleted) {
+                    await getIt<AdService>()
+                        .getAd(adType: AdService.interstitialAd)
+                        .then((value) {
+                      if (!value) {
+                        getIt<TimerService>().verifyTimer();
+                        SystemChrome.setEnabledSystemUIMode(
+                            SystemUiMode.edgeToEdge);
+                        (controller.isFromLike.isTrue)
+                            ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                            : (controller.isFromHome.isTrue)
+                                ? Get.offAllNamed(Routes.HOME)
+                                : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+                      }
+                    });
+                  } else {
+                    (controller.isFromLike.isTrue)
+                        ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                        : (controller.isFromHome.isTrue)
+                            ? Get.offAllNamed(Routes.HOME)
+                            : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: MySize.getWidth(10)),
@@ -163,6 +201,8 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            controller.isFromDownload.value = true;
+                            controller.ads();
                             if (isNullEmptyOrFalse(
                                 controller.postData!.videoThumbnail)) {
                               String path =
