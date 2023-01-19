@@ -111,8 +111,10 @@ class HomeView extends GetWidget<HomeController> {
                                     videoPlayerController:
                                         VideoPlayerController.network(
                                             dailyThought.mediaLink!),
+                                    autoPlay: true,
                                   ).obs;
                                 }
+
                                 return GestureDetector(
                                   onTap: () {},
                                   child: Padding(
@@ -123,24 +125,52 @@ class HomeView extends GetWidget<HomeController> {
                                         Expanded(
                                           child: (!isNullEmptyOrFalse(
                                                   dailyThought.videoThumbnail))
-                                              ? SizedBox(
-                                                  child: Container(
-                                                    color: Colors.black,
-                                                    height:
-                                                        MySize.getHeight(466),
-                                                    child: FlickVideoPlayer(
-                                                        flickVideoWithControls:
-                                                            FlickVideoWithControls(
-                                                          videoFit:
-                                                              BoxFit.fitHeight,
-                                                          controls:
-                                                              FlickPortraitControls(),
-                                                        ),
-                                                        flickManager: controller
-                                                            .flickManager!
-                                                            .value),
-                                                  ),
-                                                )
+                                              ? Obx(() {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      controller.isTaped
+                                                          .toggle();
+                                                    },
+                                                    child: Container(
+                                                      child: (controller
+                                                                  .flickManager ==
+                                                              null)
+                                                          ? Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            )
+                                                          : Container(
+                                                              height: MySize
+                                                                  .getHeight(
+                                                                      610),
+                                                              width: MySize
+                                                                  .getWidth(
+                                                                      320),
+                                                              child:
+                                                                  FlickVideoPlayer(
+                                                                      flickVideoWithControls:
+                                                                          FlickVideoWithControls(
+                                                                        controls:
+                                                                            Visibility(
+                                                                          visible: controller
+                                                                              .isTaped
+                                                                              .value,
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                FlickPlayToggle(size: MySize.getHeight(35)),
+                                                                          ),
+                                                                        ),
+                                                                        videoFit:
+                                                                            BoxFit.fitHeight,
+                                                                      ),
+                                                                      flickManager: controller
+                                                                          .flickManager!
+                                                                          .value),
+                                                            ),
+                                                    ),
+                                                  );
+                                                })
                                               : getImageByLink(
                                                   url: dailyThought.mediaLink!,
                                                   height: MySize.getHeight(325),

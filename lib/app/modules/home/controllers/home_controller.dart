@@ -4,10 +4,12 @@ import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 import 'package:yodo1mas/Yodo1MAS.dart';
 
 import '../../../../utilities/ad_service.dart';
@@ -16,10 +18,12 @@ import '../../../../utilities/timer_service.dart';
 class HomeController extends GetxController {
   RxBool isSave = false.obs;
   RxBool isLike = false.obs;
+  RxBool isTaped = false.obs;
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];
   Rx<FlickManager>? flickManager;
   RxString? deviceId = "".obs;
+  Rx<ChewieController>? chewieController;
   @override
   void onInit() {
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
