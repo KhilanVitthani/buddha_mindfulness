@@ -8,6 +8,7 @@ import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -16,9 +17,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
+import 'package:yodo1mas/Yodo1MasBannerAd.dart';
 
 import '../../../../constants/firebase_controller.dart';
 import '../../../../constants/sizeConstant.dart';
+import '../../../../main.dart';
+import '../../../../utilities/ad_service.dart';
+import '../../../../utilities/timer_service.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
@@ -93,7 +98,7 @@ class HomeView extends GetWidget<HomeController> {
                                     .data() as Map<String, dynamic>,
                               );
                               if (controller.likeList
-                                  .contains(dailyThought.uId!)) {
+                                  .contains(dailyThought.uId)) {
                                 dailyThought.isLiked!.value = true;
                               }
                               print(DateTime.now());
@@ -106,7 +111,6 @@ class HomeView extends GetWidget<HomeController> {
                                           dailyThought.mediaLink!),
                                 ).obs;
                               }
-
                               return GestureDetector(
                                 onTap: () {},
                                 child: Padding(
@@ -179,7 +183,24 @@ class HomeView extends GetWidget<HomeController> {
                                             width: MySize.getWidth(25),
                                           ),
                                           GestureDetector(
-                                            onTap: () {
+                                            onTap: () async {
+                                              await getIt<AdService>()
+                                                  .getAd(
+                                                      adType: AdService
+                                                          .interstitialAd)
+                                                  .then((value) {
+                                                if (!value) {
+                                                  SystemChrome
+                                                      .setEnabledSystemUIMode(
+                                                          SystemUiMode
+                                                              .edgeToEdge);
+                                                  Get.back();
+                                                }
+                                              }).catchError((error) {
+                                                print("Error := $error");
+                                              });
+                                              getIt<TimerService>()
+                                                  .verifyTimer();
                                               if (isNullEmptyOrFalse(
                                                   dailyThought
                                                       .videoThumbnail)) {

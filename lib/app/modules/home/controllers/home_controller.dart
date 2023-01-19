@@ -5,8 +5,8 @@ import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
 import 'package:flick_video_player/flick_video_player.dart';
+
 import 'package:get/get.dart';
-import '../../../models/data_model.dart';
 
 class HomeController extends GetxController {
   RxBool isSave = false.obs;
