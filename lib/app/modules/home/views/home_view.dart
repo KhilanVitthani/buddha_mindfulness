@@ -112,8 +112,12 @@ class HomeView extends GetWidget<HomeController> {
                                         VideoPlayerController.network(
                                             dailyThought.mediaLink!),
                                     autoPlay: true,
+                                    onVideoEnd: controller.onVideoEnd(),
                                   ).obs;
                                   controller.isVideo.value = true;
+                                }
+                                if (controller.isTaped.isTrue) {
+                                  controller.hide();
                                 }
 
                                 return GestureDetector(
@@ -131,14 +135,25 @@ class HomeView extends GetWidget<HomeController> {
                                                     onTap: () {
                                                       controller.isTaped
                                                           .toggle();
+
+                                                      if (controller
+                                                          .isTaped.isTrue) {
+                                                        controller.hide();
+                                                      }
                                                     },
                                                     child: Container(
                                                       child: (controller
                                                                   .flickManager ==
                                                               null)
-                                                          ? Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
+                                                          ? Visibility(
+                                                              visible:
+                                                                  controller
+                                                                      .isTaped
+                                                                      .value,
+                                                              child: Center(
+                                                                child:
+                                                                    CircularProgressIndicator(),
+                                                              ),
                                                             )
                                                           : Container(
                                                               height: MySize

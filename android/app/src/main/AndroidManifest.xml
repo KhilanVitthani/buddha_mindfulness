@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.buddha_mindfulness.buddha_mindfulness">
+    package="com.mobileappxperts.buddhaquotes">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="buddha_mindfulness"
@@ -23,7 +23,7 @@
               />
        <meta-data
            android:name="com.google.android.gms.ads.APPLICATION_ID"
-           android:value="tenPXrtko1"/>
+           android:value="YXFF80QLsa"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

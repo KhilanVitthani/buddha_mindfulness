@@ -1,4 +1,4 @@
-package com.buddha_mindfulness.buddha_mindfulness
+package com.mobileappxperts.buddhaquotes
 
 import io.flutter.embedding.android.FlutterActivity
 

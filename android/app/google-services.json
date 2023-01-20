@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:354403298691:android:5c6c1b6533fc8b8fa39ab6",
+        "mobilesdk_app_id": "1:354403298691:android:51cd41bd9fe45d32a39ab6",
         "android_client_info": {
-          "package_name": "com.buddha_mindfulness.buddha_mindfulness"
+          "package_name": "com.mobileappxperts.buddhaquotes"
         }
       },
       "oauth_client": [

@@ -75,6 +75,18 @@ class HomeController extends GetxController {
     print(box.read(ArgumentConstant.likeList));
   }
 
+  hide() {
+    if (isTaped.isTrue) {
+      Future.delayed(Duration(seconds: 5)).then((value) {
+        isTaped.value = false;
+      });
+    }
+  }
+
+  onVideoEnd() {
+    isTaped.value = true;
+  }
+
   @override
   void onReady() {
     super.onReady();

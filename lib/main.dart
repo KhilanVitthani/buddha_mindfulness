@@ -21,7 +21,7 @@ void main() async {
   ]);
   await GetStorage.init();
   Yodo1MAS.instance.init(
-    "tenPXrtko1",
+    "YXFF80QLsa",
     true,
     (successful) {},
   );
