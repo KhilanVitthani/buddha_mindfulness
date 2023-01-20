@@ -27,6 +27,9 @@ dependencies:
   video_player:
   fluttertoast:
   chewie: ^1.3.6
+
+  firebase_messaging: ^14.2.1
+  flutter_local_notifications: ^13.0.0
   flutter: 
     sdk: flutter
 

@@ -1,3 +1,4 @@
+import 'package:buddha_mindfulness/constants/notification_service.dart';
 import '../../main.dart';
 import '../utilities/ad_service.dart';
 import '../utilities/progress_dialog_utils.dart';
@@ -7,4 +8,5 @@ void setUp() {
   getIt.registerSingleton<CustomDialogs>(CustomDialogs());
   getIt.registerSingleton<TimerService>(TimerService());
   getIt.registerSingleton<AdService>(AdService());
+  getIt.registerSingleton<NotificationService>(NotificationService());
 }

@@ -6,6 +6,7 @@ import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
@@ -23,35 +24,45 @@ class HomeController extends GetxController {
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];
   Rx<FlickManager>? flickManager;
-  RxString? deviceId = "".obs;
+  RxString? mediaLink = "".obs;
   Rx<ChewieController>? chewieController;
   @override
   void onInit() {
-    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
-      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
-    }
-    Yodo1MAS.instance.setInterstitialListener((event, message) {
-      switch (event) {
-        case Yodo1MAS.AD_EVENT_OPENED:
-          print('Interstitial AD_EVENT_OPENED');
-          break;
-        case Yodo1MAS.AD_EVENT_ERROR:
-          print('Interstitial AD_EVENT_ERROR' + message);
-          break;
-        case Yodo1MAS.AD_EVENT_CLOSED:
-          getIt<TimerService>().verifyTimer();
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          Get.back();
-          break;
-      }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await ads();
+      Yodo1MAS.instance.setInterstitialListener((event, message) {
+        switch (event) {
+          case Yodo1MAS.AD_EVENT_OPENED:
+            print('Interstitial AD_EVENT_OPENED');
+            break;
+          case Yodo1MAS.AD_EVENT_ERROR:
+            print('Interstitial AD_EVENT_ERROR' + message);
+            break;
+          case Yodo1MAS.AD_EVENT_CLOSED:
+            getIt<TimerService>().verifyTimer();
+            if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+              likeList =
+                  (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+            }
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+            if (!isNullEmptyOrFalse(mediaLink)) {
+              getVideo(mediaLink: mediaLink!.value);
+            }
+            Get.back();
+            break;
+        }
+      });
     });
     super.onInit();
   }
 
-  ads() async {
+  Future<void> ads() async {
     await getIt<AdService>()
-        .getAd(adType: AdService.interstitialAd)
+        .getAd(
+      adType: AdService.interstitialAd,
+    )
         .then((value) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Get.back();
@@ -85,6 +96,16 @@ class HomeController extends GetxController {
 
   onVideoEnd() {
     isTaped.value = true;
+  }
+
+  getVideo({required String mediaLink}) {
+    if (!isNullEmptyOrFalse(mediaLink)) {
+      flickManager = FlickManager(
+        videoPlayerController: VideoPlayerController.network(mediaLink),
+        autoPlay: true,
+        onVideoEnd: onVideoEnd(),
+      ).obs;
+    }
   }
 
   @override

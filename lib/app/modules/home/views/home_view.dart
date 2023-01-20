@@ -26,7 +26,7 @@ import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/timer_service.dart';
 import '../controllers/home_controller.dart';
 
-class HomeView extends GetWidget<HomeController> {
+class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
 
   @override
@@ -107,13 +107,8 @@ class HomeView extends GetWidget<HomeController> {
                                 print(dailyThought.mediaLink);
                                 if (!isNullEmptyOrFalse(
                                     dailyThought.videoThumbnail)) {
-                                  controller.flickManager = FlickManager(
-                                    videoPlayerController:
-                                        VideoPlayerController.network(
-                                            dailyThought.mediaLink!),
-                                    autoPlay: true,
-                                    onVideoEnd: controller.onVideoEnd(),
-                                  ).obs;
+                                  controller.mediaLink!.value =
+                                      dailyThought.mediaLink!;
                                   controller.isVideo.value = true;
                                 }
                                 if (controller.isTaped.isTrue) {

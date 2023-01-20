@@ -15,33 +15,29 @@ class SplashScreenController extends GetxController {
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await time();
+      Yodo1MAS.instance.setInterstitialListener((event, message) {
+        switch (event) {
+          case Yodo1MAS.AD_EVENT_OPENED:
+            print('Interstitial AD_EVENT_OPENED');
+            break;
+          case Yodo1MAS.AD_EVENT_ERROR:
+            print('Interstitial AD_EVENT_ERROR' + message);
+            break;
+          case Yodo1MAS.AD_EVENT_CLOSED:
+            getIt<TimerService>().verifyTimer();
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+            Get.offAndToNamed(Routes.HOME);
+            break;
+        }
+      });
     });
 
-    Yodo1MAS.instance.setInterstitialListener((event, message) {
-      switch (event) {
-        case Yodo1MAS.AD_EVENT_OPENED:
-          print('Interstitial AD_EVENT_OPENED');
-          break;
-        case Yodo1MAS.AD_EVENT_ERROR:
-          print('Interstitial AD_EVENT_ERROR' + message);
-          break;
-        case Yodo1MAS.AD_EVENT_CLOSED:
-          getIt<TimerService>().verifyTimer();
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          Get.offAndToNamed(Routes.HOME);
-          break;
-      }
-    });
     super.onInit();
   }
 
   time() async {
-    await Timer(Duration(seconds: 3), () async {
-      Future.delayed(Duration(seconds: 5)).then(
-        (value) async {
-          await ads();
-        },
-      );
+    await Timer(Duration(seconds: 6), () async {
+      Get.offAndToNamed(Routes.HOME);
     });
   }
 

@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:get/get.dart';
@@ -10,24 +12,50 @@ import 'package:yodo1mas/Yodo1MAS.dart';
 
 import 'app/routes/app_pages.dart';
 import 'constants/app_module.dart';
+import 'constants/notification_service.dart';
+import 'constants/sizeConstant.dart';
 
+initFireBaseApp() async {
+  await Firebase.initializeApp();
+}
+
+@pragma('vm:entry-point')
+Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
+  if (!isNullEmptyOrFalse(message)) {
+    await Firebase.initializeApp();
+    setUp();
+    await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
+    getIt<NotificationService>().showNotification(remoteMessage: message);
+    Yodo1MAS.instance.init(
+      "YXFF80QLsa",
+      true,
+      (successful) {},
+    );
+  }
+}
+
+bool isFlutterLocalNotificationInitialize = false;
 final getIt = GetIt.instance;
 GetStorage box = GetStorage();
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  await GetStorage.init();
   Yodo1MAS.instance.init(
     "YXFF80QLsa",
     true,
     (successful) {},
   );
+  await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  await GetStorage.init();
+  setUp();
+  await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
+  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
   WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.removeAfter(afterInit);
-  setUp();
   runApp(
     GetMaterialApp(
       theme: ThemeData(

@@ -2,7 +2,7 @@
     package="com.mobileappxperts.buddhaquotes">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="buddha_mindfulness"
+        android:label="Buddha Quotes"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -34,5 +34,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <service
+            android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
+            android:exported="false"
+            android:stopWithTask="false"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/notification_icon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="androidChannel01" />
     </application>
 </manifest>
