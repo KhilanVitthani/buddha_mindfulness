@@ -48,11 +48,6 @@ void main() async {
     (successful) {},
   );
   await GetStorage.init();
-  Yodo1MAS.instance.init(
-    "YXFF80QLsa",
-    true,
-    (successful) {},
-  );
   FlutterNativeSplash.removeAfter(afterInit);
   runApp(
     GetMaterialApp(
