@@ -41,20 +41,19 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setUp();
+  await Firebase.initializeApp();
+  await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
+  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  await GetStorage.init();
   Yodo1MAS.instance.init(
     "YXFF80QLsa",
     true,
     (successful) {},
   );
-  await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  await GetStorage.init();
-  setUp();
-  await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
-  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
-  WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.removeAfter(afterInit);
   runApp(
     GetMaterialApp(
