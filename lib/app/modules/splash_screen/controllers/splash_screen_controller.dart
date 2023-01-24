@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:buddha_mindfulness/app/routes/app_pages.dart';
+import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/main.dart';
 import 'package:buddha_mindfulness/utilities/timer_service.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,9 @@ class SplashScreenController extends GetxController {
 
   time() async {
     await Timer(Duration(seconds: 6), () async {
-      Get.offAndToNamed(Routes.HOME);
+      Get.offAndToNamed(Routes.HOME, arguments: {
+        ArgumentConstant.isFromSplash: true,
+      });
     });
   }
 

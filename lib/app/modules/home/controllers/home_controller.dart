@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   RxBool isLike = false.obs;
   RxBool isTaped = false.obs;
   RxBool isVideo = false.obs;
+  RxBool isFromSplash = false.obs;
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];
   Rx<FlickManager>? flickManager;
@@ -29,7 +30,11 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await ads();
+      if (!isNullEmptyOrFalse(Get.arguments)) {
+        if (!isNullEmptyOrFalse(Get.arguments[ArgumentConstant.isFromSplash])) {
+          await ads();
+        }
+      }
     });
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
