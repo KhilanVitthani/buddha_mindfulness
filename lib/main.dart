@@ -26,11 +26,6 @@ Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
     setUp();
     await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
     getIt<NotificationService>().showNotification(remoteMessage: message);
-    Yodo1MAS.instance.init(
-      "YXFF80QLsa",
-      true,
-      (successful) {},
-    );
   }
 }
 
@@ -44,10 +39,14 @@ void main() async {
   setUp();
   await Firebase.initializeApp();
   await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
-  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  Yodo1MAS.instance.init(
+    "tenPXrtko1",
+    true,
+    (successful) {},
+  );
   await GetStorage.init();
   Yodo1MAS.instance.init(
     "YXFF80QLsa",

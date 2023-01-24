@@ -43,6 +43,7 @@ class HomeController extends GetxController {
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
           print('Interstitial AD_EVENT_OPENED');
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
           print('Interstitial AD_EVENT_ERROR' + message);

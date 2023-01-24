@@ -43,6 +43,7 @@ class ShowPostPageController extends GetxController {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
     Yodo1MAS.instance.setInterstitialListener((event, message) {
+      print("object  $event");
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
           print('Interstitial AD_EVENT_OPENED');
