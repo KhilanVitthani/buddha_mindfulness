@@ -38,9 +38,10 @@ class SplashScreenController extends GetxController {
 
   time() async {
     await Timer(Duration(seconds: 6), () async {
-      Get.offAndToNamed(Routes.HOME, arguments: {
-        ArgumentConstant.isFromSplash: true,
-      });
+      ads();
+      // Get.offAndToNamed(Routes.HOME, arguments: {
+      //   ArgumentConstant.isFromSplash: true,
+      // });
     });
   }
 

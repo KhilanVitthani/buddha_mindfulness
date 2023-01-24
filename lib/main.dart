@@ -19,15 +19,15 @@ initFireBaseApp() async {
   await Firebase.initializeApp();
 }
 
-@pragma('vm:entry-point')
-Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
-  if (!isNullEmptyOrFalse(message)) {
-    await Firebase.initializeApp();
-    setUp();
-    await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
-    getIt<NotificationService>().showNotification(remoteMessage: message);
-  }
-}
+// @pragma('vm:entry-point')
+// Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
+//   if (!isNullEmptyOrFalse(message)) {
+//     await Firebase.initializeApp();
+//     setUp();
+//     await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
+//     getIt<NotificationService>().showNotification(remoteMessage: message);
+//   }
+// }
 
 bool isFlutterLocalNotificationInitialize = false;
 final getIt = GetIt.instance;

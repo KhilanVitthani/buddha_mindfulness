@@ -29,13 +29,13 @@ class HomeController extends GetxController {
   Rx<ChewieController>? chewieController;
   @override
   void onInit() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      if (!isNullEmptyOrFalse(Get.arguments)) {
-        if (!isNullEmptyOrFalse(Get.arguments[ArgumentConstant.isFromSplash])) {
-          await ads();
-        }
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   if (!isNullEmptyOrFalse(Get.arguments)) {
+    //     if (!isNullEmptyOrFalse(Get.arguments[ArgumentConstant.isFromSplash])) {
+    //       // await ads();
+    //     }
+    //   }
+    // });
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
