@@ -109,6 +109,8 @@ class HomeView extends GetView<HomeController> {
                                     dailyThought.videoThumbnail)) {
                                   controller.mediaLink!.value =
                                       dailyThought.mediaLink!;
+                                  controller.getVideo(
+                                      mediaLink: controller.mediaLink!.value);
                                   controller.isVideo.value = true;
                                 }
                                 if (controller.isTaped.isTrue) {

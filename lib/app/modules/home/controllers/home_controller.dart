@@ -30,28 +30,27 @@ class HomeController extends GetxController {
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await ads();
-      Yodo1MAS.instance.setInterstitialListener((event, message) {
-        switch (event) {
-          case Yodo1MAS.AD_EVENT_OPENED:
-            print('Interstitial AD_EVENT_OPENED');
-            break;
-          case Yodo1MAS.AD_EVENT_ERROR:
-            print('Interstitial AD_EVENT_ERROR' + message);
-            break;
-          case Yodo1MAS.AD_EVENT_CLOSED:
-            getIt<TimerService>().verifyTimer();
-            if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
-              likeList =
-                  (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
-            }
-            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-            if (!isNullEmptyOrFalse(mediaLink)) {
-              getVideo(mediaLink: mediaLink!.value);
-            }
-            Get.back();
-            break;
-        }
-      });
+    });
+    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    }
+    Yodo1MAS.instance.setInterstitialListener((event, message) {
+      switch (event) {
+        case Yodo1MAS.AD_EVENT_OPENED:
+          print('Interstitial AD_EVENT_OPENED');
+          break;
+        case Yodo1MAS.AD_EVENT_ERROR:
+          print('Interstitial AD_EVENT_ERROR' + message);
+          break;
+        case Yodo1MAS.AD_EVENT_CLOSED:
+          getIt<TimerService>().verifyTimer();
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          if (!isNullEmptyOrFalse(mediaLink)) {
+            getVideo(mediaLink: mediaLink!.value);
+          }
+          Get.back();
+          break;
+      }
     });
     super.onInit();
   }
@@ -62,6 +61,7 @@ class HomeController extends GetxController {
       adType: AdService.interstitialAd,
     )
         .then((value) {
+      getIt<TimerService>().verifyTimer();
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
