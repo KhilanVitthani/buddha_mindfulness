@@ -4,7 +4,6 @@ import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +25,6 @@ class HomeController extends GetxController {
   List likeList = [];
   Rx<FlickManager>? flickManager;
   RxString? mediaLink = "".obs;
-  Rx<ChewieController>? chewieController;
   @override
   void onInit() {
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -39,6 +37,7 @@ class HomeController extends GetxController {
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
+
     Yodo1MAS.instance.setInterstitialListener((event, message) {
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
@@ -46,6 +45,12 @@ class HomeController extends GetxController {
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
+          getIt<TimerService>().verifyTimer();
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          if (!isNullEmptyOrFalse(mediaLink)) {
+            getVideo(mediaLink: mediaLink!.value);
+          }
+          Get.back();
           print('Interstitial AD_EVENT_ERROR' + message);
           break;
         case Yodo1MAS.AD_EVENT_CLOSED:

@@ -4,7 +4,6 @@ import 'package:buddha_mindfulness/app/models/save_model.dart';
 import 'package:buddha_mindfulness/app/routes/app_pages.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/color_constant.dart';
-import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:yodo1mas/Yodo1MasBannerAd.dart';

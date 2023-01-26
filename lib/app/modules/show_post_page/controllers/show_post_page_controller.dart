@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -49,6 +48,18 @@ class ShowPostPageController extends GetxController {
           print('Interstitial AD_EVENT_OPENED');
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
+          getIt<TimerService>().verifyTimer();
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          if (isFromDownload.isTrue) {
+            Get.back();
+            isFromDownload.value = false;
+          } else {
+            (isFromLike.isTrue)
+                ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                : (isFromHome.isTrue)
+                    ? Get.offAllNamed(Routes.HOME)
+                    : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+          }
           print('Interstitial AD_EVENT_ERROR' + message);
           break;
         case Yodo1MAS.AD_EVENT_CLOSED:

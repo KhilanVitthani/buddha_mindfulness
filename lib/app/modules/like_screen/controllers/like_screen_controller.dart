@@ -27,6 +27,9 @@ class LikeScreenController extends GetxController {
           print('Interstitial AD_EVENT_OPENED');
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
+          getIt<TimerService>().verifyTimer();
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+          Get.offAndToNamed(Routes.HOME);
           print('Interstitial AD_EVENT_ERROR' + message);
           break;
         case Yodo1MAS.AD_EVENT_CLOSED:

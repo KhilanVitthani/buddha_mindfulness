@@ -22,6 +22,9 @@ class SplashScreenController extends GetxController {
             print('Interstitial AD_EVENT_OPENED');
             break;
           case Yodo1MAS.AD_EVENT_ERROR:
+            getIt<TimerService>().verifyTimer();
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+            Get.offAndToNamed(Routes.HOME);
             print('Interstitial AD_EVENT_ERROR' + message);
             break;
           case Yodo1MAS.AD_EVENT_CLOSED:
@@ -37,7 +40,7 @@ class SplashScreenController extends GetxController {
   }
 
   time() async {
-    await Timer(Duration(seconds: 6), () async {
+    await Timer(Duration(seconds: 8), () async {
       ads();
       // Get.offAndToNamed(Routes.HOME, arguments: {
       //   ArgumentConstant.isFromSplash: true,
@@ -52,6 +55,10 @@ class SplashScreenController extends GetxController {
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Get.offAndToNamed(Routes.HOME);
+      } else {
+        Future.delayed(Duration(seconds: 5)).then((value) {
+          Get.offAndToNamed(Routes.HOME);
+        });
       }
     }).catchError((error) {
       print("Error := $error");

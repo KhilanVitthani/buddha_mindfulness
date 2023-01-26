@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:get/get.dart';
@@ -13,7 +11,6 @@ import 'package:yodo1mas/Yodo1MAS.dart';
 
 import 'app/routes/app_pages.dart';
 import 'constants/app_module.dart';
-import 'constants/notification_service.dart';
 import 'constants/sizeConstant.dart';
 
 initFireBaseApp() async {
@@ -33,13 +30,10 @@ initFireBaseApp() async {
 bool isFlutterLocalNotificationInitialize = false;
 final getIt = GetIt.instance;
 GetStorage box = GetStorage();
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setUp();
   await Firebase.initializeApp();
-  await getIt<NotificationService>().init(flutterLocalNotificationsPlugin);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -53,12 +47,12 @@ void main() async {
   });
   OneSignal.shared.setNotificationWillShowInForegroundHandler(
       (OSNotificationReceivedEvent event) {
-    // Will be called whenever a notification is received in foreground
+    // Will be called whenever a notification is receiv ed in foreground
     // Display Notification, pass null param for not displaying the notification
     event.complete(event.notification);
   });
   Yodo1MAS.instance.init(
-    "YXFF80QLsa",
+    "tenPXrtko1",
     true,
     (successful) {},
   );
