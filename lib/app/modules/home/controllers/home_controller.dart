@@ -27,17 +27,12 @@ class HomeController extends GetxController {
   RxString? mediaLink = "".obs;
   @override
   void onInit() {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   if (!isNullEmptyOrFalse(Get.arguments)) {
-    //     if (!isNullEmptyOrFalse(Get.arguments[ArgumentConstant.isFromSplash])) {
-    //       // await ads();
-    //     }
-    //   }
-    // });
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
-
+    if (getIt<TimerService>().is40SecCompleted) {
+      ads();
+    }
     Yodo1MAS.instance.setInterstitialListener((event, message) {
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
@@ -72,7 +67,6 @@ class HomeController extends GetxController {
       adType: AdService.interstitialAd,
     )
         .then((value) {
-      getIt<TimerService>().verifyTimer();
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

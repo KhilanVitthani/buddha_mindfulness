@@ -52,6 +52,7 @@ class SplashScreenController extends GetxController {
     await getIt<AdService>()
         .getAd(adType: AdService.interstitialAd)
         .then((value) {
+      getIt<TimerService>().verifyTimer();
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Get.offAndToNamed(Routes.HOME);

@@ -480,7 +480,9 @@ class HomeView extends GetView<HomeController> {
                                           ),
                                         );
                                       },
-                                      itemCount: data.data!.docs.length,
+                                      itemCount: (data.data!.docs.length < 15)
+                                          ? data.data!.docs.length
+                                          : 15,
                                     ),
                                   ),
                                 ),

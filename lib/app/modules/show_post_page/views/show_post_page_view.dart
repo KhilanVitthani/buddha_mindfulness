@@ -18,6 +18,7 @@ import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/timer_service.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/show_post_page_controller.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class ShowPostPageView extends GetWidget<ShowPostPageController> {
   const ShowPostPageView({Key? key}) : super(key: key);
@@ -25,28 +26,11 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (getIt<TimerService>().is40SecCompleted) {
-          await getIt<AdService>()
-              .getAd(adType: AdService.interstitialAd)
-              .then((value) {
-            if (!value) {
-              getIt<TimerService>().verifyTimer();
-              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-              (controller.isFromLike.isTrue)
-                  ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                  : (controller.isFromHome.isTrue)
-                      ? Get.offAllNamed(Routes.HOME)
-                      : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-            }
-          });
-          return await false;
-        } else {
-          (controller.isFromLike.isTrue)
-              ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-              : (controller.isFromHome.isTrue)
-                  ? Get.offAllNamed(Routes.HOME)
-                  : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-        }
+        (controller.isFromLike.isTrue)
+            ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+            : (controller.isFromHome.isTrue)
+                ? Get.offAllNamed(Routes.HOME)
+                : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
         return await true;
       },
       child: SafeArea(
@@ -65,28 +49,11 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
               centerTitle: true,
               leading: GestureDetector(
                 onTap: () async {
-                  if (getIt<TimerService>().is40SecCompleted) {
-                    await getIt<AdService>()
-                        .getAd(adType: AdService.interstitialAd)
-                        .then((value) {
-                      if (!value) {
-                        getIt<TimerService>().verifyTimer();
-                        SystemChrome.setEnabledSystemUIMode(
-                            SystemUiMode.edgeToEdge);
-                        (controller.isFromLike.isTrue)
-                            ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                            : (controller.isFromHome.isTrue)
-                                ? Get.offAllNamed(Routes.HOME)
-                                : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-                      }
-                    });
-                  } else {
-                    (controller.isFromLike.isTrue)
-                        ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                        : (controller.isFromHome.isTrue)
-                            ? Get.offAllNamed(Routes.HOME)
-                            : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-                  }
+                  (controller.isFromLike.isTrue)
+                      ? Get.offAndToNamed(Routes.LIKE_SCREEN)
+                      : (controller.isFromHome.isTrue)
+                          ? Get.offAllNamed(Routes.HOME)
+                          : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: MySize.getWidth(10)),
@@ -109,151 +76,272 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                 )
               ],
             ),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  (!isNullEmptyOrFalse(controller.postData!.videoThumbnail))
-                      ? Container(
-                          child: (controller.flickManager == null)
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Container(
-                                  height: MySize.getHeight(610),
-                                  width: MySize.getWidth(320),
-                                  child: FlickVideoPlayer(
-                                      flickVideoWithControls:
-                                          FlickVideoWithControls(
-                                        controls: FlickPortraitControls(),
-                                      ),
-                                      flickManager:
-                                          controller.flickManager!.value),
+            backgroundColor: Colors.white,
+            body: (isNullEmptyOrFalse(controller.postData!.videoThumbnail))
+                ? Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: MySize.getWidth(20)),
+                        child: PhotoView.customChild(
+                          child: getImageByLink(
+                            url: controller.postData!.mediaLink.toString(),
+                          ),
+                          initialScale: 1.0,
+                          backgroundDecoration:
+                              BoxDecoration(color: Colors.white),
+                          enableRotation: false,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: MySize.getHeight(135),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: MySize.getWidth(20)),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: MySize.getWidth(14),
+                              ),
+                              Obx(() {
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.postData!.isLiked!.toggle();
+                                    if (controller.postData!.isLiked!.isTrue) {
+                                      controller.addDataToLike(
+                                          data: controller.postData!.uId
+                                              .toString()
+                                              .trim());
+                                    } else {
+                                      controller.removeDataToLike(
+                                          data: controller.postData!.uId
+                                              .toString()
+                                              .trim());
+                                    }
+                                  },
+                                  child: (controller.postData!.isLiked!.isTrue)
+                                      ? SvgPicture.asset(
+                                          imagePath + "likeFill.svg",
+                                          height: MySize.getHeight(22.94),
+                                        )
+                                      : SvgPicture.asset(
+                                          imagePath + "like.svg",
+                                          height: MySize.getHeight(22.94),
+                                        ),
+                                );
+                              }),
+                              SizedBox(
+                                width: MySize.getWidth(25),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.isFromDownload.value = true;
+                                  controller.ads();
+                                  if (isNullEmptyOrFalse(
+                                      controller.postData!.videoThumbnail)) {
+                                    String path = controller.postData!.mediaLink
+                                        .toString();
+                                    print(path);
+                                    GallerySaver.saveImage(path).then((value) {
+                                      Fluttertoast.showToast(
+                                          msg: "Success!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    });
+                                  } else {
+                                    String path = controller.postData!.mediaLink
+                                        .toString();
+                                    print(path);
+                                    GallerySaver.saveVideo(path).then((value) {
+                                      Fluttertoast.showToast(
+                                          msg: "Success!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    });
+                                  }
+                                },
+                                child: SvgPicture.asset(
+                                  imagePath + "down.svg",
+                                  height: MySize.getHeight(22.94),
                                 ),
-                        )
-                      : Container(
-                          alignment: Alignment.center,
-                          width: MySize.getWidth(320),
-                          height: MySize.getHeight(325),
-                          child: ClipRRect(
-                            child: PhotoView.customChild(
-                              child: getImageByLink(
-                                  url:
-                                      controller.postData!.mediaLink.toString(),
-                                  height: MySize.getHeight(325),
-                                  width: MySize.getWidth(320),
-                                  boxFit: BoxFit.fill),
-                              initialScale: 1.0,
-                              enableRotation: false,
-                            ),
+                              ),
+                              SizedBox(
+                                width: MySize.getWidth(25),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Share.share(controller.postData!.mediaLink!);
+                                },
+                                child: SvgPicture.asset(
+                                  imagePath + "share.svg",
+                                  height: MySize.getHeight(22.94),
+                                ),
+                              ),
+                            ],
                           ),
-                          // child: PinchZoom(
-                          //   child: getImageByLink(
-                          //       url: controller.postData!.mediaLink.toString(),
-                          //       height: MySize.getHeight(25),
-                          //       width: MySize.getWidth(25),
-                          //       boxFit: BoxFit.fill),
-                          //   maxScale: MySize.getHeight(5),
-                          // ),
                         ),
-                  SizedBox(
-                    height: MySize.getHeight(25),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: MySize.getWidth(10)),
-                    child: Row(
+                      )
+                    ],
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        (!isNullEmptyOrFalse(
+                                controller.postData!.videoThumbnail))
+                            ? Container(
+                                child: (controller.flickManager == null)
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : Container(
+                                        height: MySize.getHeight(610),
+                                        width: MySize.getWidth(320),
+                                        child: FlickVideoPlayer(
+                                            flickVideoWithControls:
+                                                FlickVideoWithControls(
+                                              controls: FlickPortraitControls(),
+                                            ),
+                                            flickManager:
+                                                controller.flickManager!.value),
+                                      ),
+                              )
+                            : Container(
+                                alignment: Alignment.center,
+                                width: MySize.getWidth(320),
+                                height: MySize.getHeight(325),
+                                child: PhotoViewGallery.builder(
+                                    itemCount: 1,
+                                    builder: (context, index) {
+                                      return PhotoViewGalleryPageOptions(
+                                        imageProvider: NetworkImage(controller
+                                            .postData!.mediaLink
+                                            .toString()),
+                                        initialScale:
+                                            PhotoViewComputedScale.contained *
+                                                0.8,
+                                      );
+                                    }),
+                                // PhotoView.customChild(
+                                //   child: getImageByLink(
+                                //     url: controller.postData!.mediaLink.toString(),
+                                //   ),
+                                //   initialScale: 1.0,
+                                //   enableRotation: false,
+                                // ),
+                                // child: PinchZoom(
+                                //   child: getImageByLink(
+                                //       url: controller.postData!.mediaLink.toString(),
+                                //       height: MySize.getHeight(25),
+                                //       width: MySize.getWidth(25),
+                                //       boxFit: BoxFit.fill),
+                                //   maxScale: MySize.getHeight(5),
+                                // ),
+                              ),
                         SizedBox(
-                          width: MySize.getWidth(14),
+                          height: MySize.getHeight(25),
                         ),
-                        Obx(() {
-                          return GestureDetector(
-                            onTap: () {
-                              controller.postData!.isLiked!.toggle();
-                              if (controller.postData!.isLiked!.isTrue) {
-                                controller.addDataToLike(
-                                    data: controller.postData!.uId
-                                        .toString()
-                                        .trim());
-                              } else {
-                                controller.removeDataToLike(
-                                    data: controller.postData!.uId
-                                        .toString()
-                                        .trim());
-                              }
-                            },
-                            child: (controller.postData!.isLiked!.isTrue)
-                                ? SvgPicture.asset(
-                                    imagePath + "likeFill.svg",
-                                    height: MySize.getHeight(22.94),
-                                  )
-                                : SvgPicture.asset(
-                                    imagePath + "like.svg",
-                                    height: MySize.getHeight(22.94),
-                                  ),
-                          );
-                        }),
-                        SizedBox(
-                          width: MySize.getWidth(25),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.isFromDownload.value = true;
-                            controller.ads();
-                            if (isNullEmptyOrFalse(
-                                controller.postData!.videoThumbnail)) {
-                              String path =
-                                  controller.postData!.mediaLink.toString();
-                              print(path);
-                              GallerySaver.saveImage(path).then((value) {
-                                Fluttertoast.showToast(
-                                    msg: "Success!",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              });
-                            } else {
-                              String path =
-                                  controller.postData!.mediaLink.toString();
-                              print(path);
-                              GallerySaver.saveVideo(path).then((value) {
-                                Fluttertoast.showToast(
-                                    msg: "Success!",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              });
-                            }
-                          },
-                          child: SvgPicture.asset(
-                            imagePath + "down.svg",
-                            height: MySize.getHeight(22.94),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: MySize.getWidth(10)),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: MySize.getWidth(14),
+                              ),
+                              Obx(() {
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.postData!.isLiked!.toggle();
+                                    if (controller.postData!.isLiked!.isTrue) {
+                                      controller.addDataToLike(
+                                          data: controller.postData!.uId
+                                              .toString()
+                                              .trim());
+                                    } else {
+                                      controller.removeDataToLike(
+                                          data: controller.postData!.uId
+                                              .toString()
+                                              .trim());
+                                    }
+                                  },
+                                  child: (controller.postData!.isLiked!.isTrue)
+                                      ? SvgPicture.asset(
+                                          imagePath + "likeFill.svg",
+                                          height: MySize.getHeight(22.94),
+                                        )
+                                      : SvgPicture.asset(
+                                          imagePath + "like.svg",
+                                          height: MySize.getHeight(22.94),
+                                        ),
+                                );
+                              }),
+                              SizedBox(
+                                width: MySize.getWidth(25),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.isFromDownload.value = true;
+                                  controller.ads();
+                                  if (isNullEmptyOrFalse(
+                                      controller.postData!.videoThumbnail)) {
+                                    String path = controller.postData!.mediaLink
+                                        .toString();
+                                    print(path);
+                                    GallerySaver.saveImage(path).then((value) {
+                                      Fluttertoast.showToast(
+                                          msg: "Success!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    });
+                                  } else {
+                                    String path = controller.postData!.mediaLink
+                                        .toString();
+                                    print(path);
+                                    GallerySaver.saveVideo(path).then((value) {
+                                      Fluttertoast.showToast(
+                                          msg: "Success!",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    });
+                                  }
+                                },
+                                child: SvgPicture.asset(
+                                  imagePath + "down.svg",
+                                  height: MySize.getHeight(22.94),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MySize.getWidth(25),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Share.share(controller.postData!.mediaLink!);
+                                },
+                                child: SvgPicture.asset(
+                                  imagePath + "share.svg",
+                                  height: MySize.getHeight(22.94),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          width: MySize.getWidth(25),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Share.share(controller.postData!.mediaLink!);
-                          },
-                          child: SvgPicture.asset(
-                            imagePath + "share.svg",
-                            height: MySize.getHeight(22.94),
-                          ),
-                        ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            )),
+                  )),
       ),
     );
   }

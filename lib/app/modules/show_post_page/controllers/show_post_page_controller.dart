@@ -50,31 +50,14 @@ class ShowPostPageController extends GetxController {
         case Yodo1MAS.AD_EVENT_ERROR:
           getIt<TimerService>().verifyTimer();
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          if (isFromDownload.isTrue) {
-            Get.back();
-            isFromDownload.value = false;
-          } else {
-            (isFromLike.isTrue)
-                ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                : (isFromHome.isTrue)
-                    ? Get.offAllNamed(Routes.HOME)
-                    : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-          }
+          Get.back();
           print('Interstitial AD_EVENT_ERROR' + message);
           break;
         case Yodo1MAS.AD_EVENT_CLOSED:
           getIt<TimerService>().verifyTimer();
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          if (isFromDownload.isTrue) {
-            Get.back();
-            isFromDownload.value = false;
-          } else {
-            (isFromLike.isTrue)
-                ? Get.offAndToNamed(Routes.LIKE_SCREEN)
-                : (isFromHome.isTrue)
-                    ? Get.offAllNamed(Routes.HOME)
-                    : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
-          }
+          Get.back();
+
           break;
       }
     });
@@ -87,6 +70,7 @@ class ShowPostPageController extends GetxController {
         .then((value) {
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        Get.back();
       }
     }).catchError((error) {
       print("Error := $error");

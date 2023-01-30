@@ -7,6 +7,7 @@ import 'package:yodo1mas/Yodo1MAS.dart';
 
 import '../../../../constants/api_constants.dart';
 import '../../../../main.dart';
+import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/timer_service.dart';
 import '../../../models/daily_thought_model.dart';
 import '../../../routes/app_pages.dart';
@@ -20,6 +21,9 @@ class LikeScreenController extends GetxController {
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList.value =
           (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    }
+    if (getIt<TimerService>().is40SecCompleted) {
+      ads();
     }
     Yodo1MAS.instance.setInterstitialListener((event, message) {
       switch (event) {
@@ -35,7 +39,7 @@ class LikeScreenController extends GetxController {
         case Yodo1MAS.AD_EVENT_CLOSED:
           getIt<TimerService>().verifyTimer();
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          Get.offAndToNamed(Routes.HOME);
+          Get.back();
 
           break;
       }
@@ -47,6 +51,22 @@ class LikeScreenController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+  }
+
+  Future<void> ads() async {
+    await getIt<AdService>()
+        .getAd(
+      adType: AdService.interstitialAd,
+    )
+        .then((value) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      if (!value) {
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        Get.back();
+      }
+    }).catchError((error) {
+      print("Error := $error");
+    });
   }
 
   @override
