@@ -194,57 +194,23 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        (!isNullEmptyOrFalse(
-                                controller.postData!.videoThumbnail))
-                            ? Container(
-                                child: (controller.flickManager == null)
-                                    ? Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : Container(
-                                        height: MySize.getHeight(610),
-                                        width: MySize.getWidth(320),
-                                        child: FlickVideoPlayer(
-                                            flickVideoWithControls:
-                                                FlickVideoWithControls(
-                                              controls: FlickPortraitControls(),
-                                            ),
-                                            flickManager:
-                                                controller.flickManager!.value),
+                        Container(
+                          child: (controller.flickManager == null)
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  height: MySize.getHeight(610),
+                                  width: MySize.getWidth(320),
+                                  child: FlickVideoPlayer(
+                                      flickVideoWithControls:
+                                          FlickVideoWithControls(
+                                        controls: FlickPortraitControls(),
                                       ),
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                width: MySize.getWidth(320),
-                                height: MySize.getHeight(325),
-                                child: PhotoViewGallery.builder(
-                                    itemCount: 1,
-                                    builder: (context, index) {
-                                      return PhotoViewGalleryPageOptions(
-                                        imageProvider: NetworkImage(controller
-                                            .postData!.mediaLink
-                                            .toString()),
-                                        initialScale:
-                                            PhotoViewComputedScale.contained *
-                                                0.8,
-                                      );
-                                    }),
-                                // PhotoView.customChild(
-                                //   child: getImageByLink(
-                                //     url: controller.postData!.mediaLink.toString(),
-                                //   ),
-                                //   initialScale: 1.0,
-                                //   enableRotation: false,
-                                // ),
-                                // child: PinchZoom(
-                                //   child: getImageByLink(
-                                //       url: controller.postData!.mediaLink.toString(),
-                                //       height: MySize.getHeight(25),
-                                //       width: MySize.getWidth(25),
-                                //       boxFit: BoxFit.fill),
-                                //   maxScale: MySize.getHeight(5),
-                                // ),
-                              ),
+                                      flickManager:
+                                          controller.flickManager!.value),
+                                ),
+                        ),
                         SizedBox(
                           height: MySize.getHeight(25),
                         ),
