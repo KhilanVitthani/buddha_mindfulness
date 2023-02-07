@@ -224,6 +224,7 @@ class LikeScreenView extends GetView<LikeScreenController> {
                     stream: FireController().getDailyThought(),
                   ),
                 ),
+                getIt<AdService>().getBanners(),
               ],
             ),
           ),

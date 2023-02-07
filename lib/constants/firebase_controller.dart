@@ -8,8 +8,8 @@ class FireController {
       _firebaseFirestore.collection("post");
   final CollectionReference _dailyThoughtCollectionReferance =
       _firebaseFirestore.collection("dailyThought");
-  final CollectionReference _saveThoughtCollectionReferance =
-      _firebaseFirestore.collection("saveThought");
+  final CollectionReference _adsReferance =
+      _firebaseFirestore.collection("Ads");
 
   Stream<QuerySnapshot> getPost() {
     print('getMessage');
@@ -25,6 +25,11 @@ class FireController {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> adsVisible() {
+    print('getMessage');
+    return _adsReferance.snapshots();
+  }
+
   Future<void> saveQuote({required bool status, required String Uid}) async {
     return await _dailyThoughtCollectionReferance
         .doc(Uid)
@@ -37,17 +42,5 @@ class FireController {
         .update({"isLike": status});
   }
 
-  Future<void> addSaveDataToFireStore(
-      {required SaveThoughtModel saveThoughtModel}) async {
-    return await _saveThoughtCollectionReferance
-        .doc(saveThoughtModel.uId.toString())
-        .set(saveThoughtModel.toJson());
-  }
 
-  Future<void> removeSaveDataToFireStore(
-      {required SaveThoughtModel saveThoughtModel}) async {
-    return await _saveThoughtCollectionReferance
-        .doc(saveThoughtModel.uId.toString())
-        .delete();
-  }
 }

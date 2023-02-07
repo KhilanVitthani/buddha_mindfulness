@@ -176,6 +176,7 @@ class AllPostScreenView extends GetWidget<AllPostScreenController> {
                     stream: FireController().getPost(),
                   ),
                 ),
+                getIt<AdService>().getBanners(),
               ],
             ),
           ),

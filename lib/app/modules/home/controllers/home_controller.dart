@@ -20,6 +20,7 @@ class HomeController extends GetxController {
   RxBool isLike = false.obs;
   RxBool isTaped = false.obs;
   RxBool isVideo = false.obs;
+  RxBool isAdsVisible = false.obs;
   RxBool isFromSplash = false.obs;
   RxList<dailyThoughtModel> post = RxList<dailyThoughtModel>([]);
   List likeList = [];

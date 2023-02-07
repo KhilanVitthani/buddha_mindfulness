@@ -186,6 +186,11 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                             ],
                           ),
                         ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: MySize.getWidth(25),
+                        child: getIt<AdService>().getBanners(),
                       )
                     ],
                   )
@@ -304,7 +309,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                               ),
                             ],
                           ),
-                        )
+                        ),
+                        Spacer(),
+                        getIt<AdService>().getBanners(),
                       ],
                     ),
                   )),
