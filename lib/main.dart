@@ -52,7 +52,7 @@ void main() async {
     event.complete(event.notification);
   });
   Yodo1MAS.instance.init(
-    "oM3jMyKpn9",
+    "tenPXrtko1",
     true,
     (successful) {},
   );

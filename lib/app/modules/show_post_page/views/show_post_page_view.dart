@@ -31,6 +31,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
             : (controller.isFromHome.isTrue)
                 ? Get.offAllNamed(Routes.HOME)
                 : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+        controller.dispose();
         return await true;
       },
       child: SafeArea(
@@ -54,6 +55,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                       : (controller.isFromHome.isTrue)
                           ? Get.offAllNamed(Routes.HOME)
                           : Get.offAndToNamed(Routes.ALL_POST_SCREEN);
+                  controller.dispose();
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: MySize.getWidth(10)),
@@ -188,7 +190,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
+                        bottom: MySize.getHeight(5),
                         left: MySize.getWidth(25),
                         child: getIt<AdService>().getBanners(),
                       )
@@ -199,13 +201,14 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Spacer(),
                         Container(
                           child: (controller.flickManager == null)
                               ? Center(
                                   child: CircularProgressIndicator(),
                                 )
                               : Container(
-                                  height: MySize.getHeight(610),
+                                  height: MySize.getHeight(600),
                                   width: MySize.getWidth(320),
                                   child: FlickVideoPlayer(
                                       flickVideoWithControls:
@@ -312,6 +315,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                         ),
                         Spacer(),
                         getIt<AdService>().getBanners(),
+                        SizedBox(
+                          height: MySize.getHeight(5),
+                        )
                       ],
                     ),
                   )),
