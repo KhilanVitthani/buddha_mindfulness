@@ -155,6 +155,19 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                           timeInSecForIosWeb: 1,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
+                                    }).catchError((error){
+                                      Fluttertoast.showToast(
+                                          msg: "Something went wrong!",
+                                          toastLength: Toast
+                                              .LENGTH_SHORT,
+                                          gravity:
+                                          ToastGravity
+                                              .BOTTOM,
+                                          timeInSecForIosWeb:
+                                          1,
+                                          textColor:
+                                          Colors.white,
+                                          fontSize: 16.0);
                                     });
                                   } else {
                                     String path = controller.postData!.mediaLink
@@ -167,6 +180,19 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }).catchError((error){
+                                      Fluttertoast.showToast(
+                                          msg: "Something went wrong!",
+                                          toastLength: Toast
+                                              .LENGTH_SHORT,
+                                          gravity:
+                                          ToastGravity
+                                              .BOTTOM,
+                                          timeInSecForIosWeb:
+                                          1,
+                                          textColor:
+                                          Colors.white,
                                           fontSize: 16.0);
                                     });
                                   }
@@ -281,6 +307,19 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                           timeInSecForIosWeb: 1,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
+                                    }).catchError((error){
+                                      Fluttertoast.showToast(
+                                          msg: "Something went wrong!",
+                                          toastLength: Toast
+                                              .LENGTH_SHORT,
+                                          gravity:
+                                          ToastGravity
+                                              .BOTTOM,
+                                          timeInSecForIosWeb:
+                                          1,
+                                          textColor:
+                                          Colors.white,
+                                          fontSize: 16.0);
                                     });
                                   } else {
                                     String path = controller.postData!.mediaLink
@@ -293,6 +332,19 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }).catchError((error){
+                                      Fluttertoast.showToast(
+                                          msg: "Something went wrong!",
+                                          toastLength: Toast
+                                              .LENGTH_SHORT,
+                                          gravity:
+                                          ToastGravity
+                                              .BOTTOM,
+                                          timeInSecForIosWeb:
+                                          1,
+                                          textColor:
+                                          Colors.white,
                                           fontSize: 16.0);
                                     });
                                   }

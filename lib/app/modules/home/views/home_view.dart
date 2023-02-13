@@ -283,6 +283,19 @@ class HomeView extends GetWidget<HomeController> {
                                                               textColor:
                                                                   Colors.white,
                                                               fontSize: 16.0);
+                                                        }).catchError((error){
+                                                          Fluttertoast.showToast(
+                                                              msg: "Something went wrong!",
+                                                              toastLength: Toast
+                                                                  .LENGTH_SHORT,
+                                                              gravity:
+                                                              ToastGravity
+                                                                  .BOTTOM,
+                                                              timeInSecForIosWeb:
+                                                              1,
+                                                              textColor:
+                                                              Colors.white,
+                                                              fontSize: 16.0);
                                                         });
                                                       } else {
                                                         String path =
@@ -306,7 +319,18 @@ class HomeView extends GetWidget<HomeController> {
                                                                   Colors.white,
                                                               fontSize: 16.0);
                                                         }).catchError((error) {
-                                                          print(error);
+                                                          Fluttertoast.showToast(
+                                                              msg: "Something went wrong!",
+                                                              toastLength: Toast
+                                                                  .LENGTH_SHORT,
+                                                              gravity:
+                                                              ToastGravity
+                                                                  .BOTTOM,
+                                                              timeInSecForIosWeb:
+                                                              1,
+                                                              textColor:
+                                                              Colors.white,
+                                                              fontSize: 16.0);
                                                         });
                                                       }
                                                     },
