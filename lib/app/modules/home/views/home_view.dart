@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
 import 'package:buddha_mindfulness/app/models/data_model.dart';
 import 'package:buddha_mindfulness/app/models/save_model.dart';
@@ -8,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -317,9 +320,9 @@ class HomeView extends GetWidget<HomeController> {
                                                     width: MySize.getWidth(25),
                                                   ),
                                                   GestureDetector(
-                                                    onTap: () {
-                                                      Share.share(dailyThought
-                                                          .mediaLink!);
+                                                    onTap: () async {
+                                                      File file = await DefaultCacheManager().getSingleFile( dailyThought.mediaLink!);
+                                                    Share.shareFiles([file.path]);
                                                     },
                                                     child: SvgPicture.asset(
                                                       imagePath + "share.svg",

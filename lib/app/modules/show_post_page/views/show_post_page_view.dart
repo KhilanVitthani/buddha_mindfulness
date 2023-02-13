@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:buddha_mindfulness/constants/color_constant.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -177,8 +180,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                 width: MySize.getWidth(25),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  Share.share(controller.postData!.mediaLink!);
+                                onTap: () async {
+                                  File file = await DefaultCacheManager().getSingleFile( controller.postData!.mediaLink!);
+                                  Share.shareFiles([file.path]);
                                 },
                                 child: SvgPicture.asset(
                                   imagePath + "share.svg",
@@ -302,8 +306,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                 width: MySize.getWidth(25),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  Share.share(controller.postData!.mediaLink!);
+                                onTap: () async {
+                                  File file = await DefaultCacheManager().getSingleFile( controller.postData!.mediaLink!);
+                                  Share.shareFiles([file.path]);
                                 },
                                 child: SvgPicture.asset(
                                   imagePath + "share.svg",
