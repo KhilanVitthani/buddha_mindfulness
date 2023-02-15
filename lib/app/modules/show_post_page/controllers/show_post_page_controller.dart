@@ -14,6 +14,7 @@ import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/timer_service.dart';
 import '../../../models/data_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../home/controllers/home_controller.dart';
 
 class ShowPostPageController extends GetxController {
   dailyThoughtModel? postData;
@@ -23,29 +24,39 @@ class ShowPostPageController extends GetxController {
   RxBool isFromLike = false.obs;
   RxBool isFromDownload = false.obs;
   List likeList = [];
-
+  HomeController? homeController;
+  RxInt Index = 0.obs;
   @override
   void onInit() {
     if (Get.arguments != null) {
-      postData = Get.arguments[ArgumentConstant.post];
+      // postData = Get.arguments[ArgumentConstant.post];
+      Index.value = Get.arguments[ArgumentConstant.index];
       isFromHome.value = Get.arguments[ArgumentConstant.isFromHome];
       isFromLike.value = Get.arguments[ArgumentConstant.isFromLike];
-      print(postData!.videoThumbnail);
+      print(Index);
     }
-    if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
+    Get.lazyPut(() => HomeController());
+    homeController = Get.find<HomeController>();
+    if (!isNullEmptyOrFalse(homeController!.post[Index.value].videoThumbnail)) {
       flickManager = FlickManager(
-        videoPlayerController:
-            VideoPlayerController.network(postData!.mediaLink!),
+        videoPlayerController: VideoPlayerController.network(
+            homeController!.post[Index.value].mediaLink!),
       ).obs;
     }
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+      if (likeList.contains(homeController!.post[Index.value].uId)) {
+        homeController!.post[Index.value].isLiked!.value = true;
+      }
+    }
+    if (getIt<TimerService>().is40SecCompleted) {
+      ads();
     }
     Yodo1MAS.instance.setInterstitialListener((event, message) {
-      print("object  $event");
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
           print('Interstitial AD_EVENT_OPENED');
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
           getIt<TimerService>().verifyTimer();
@@ -57,17 +68,20 @@ class ShowPostPageController extends GetxController {
           getIt<TimerService>().verifyTimer();
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
           Get.back();
-
           break;
       }
     });
     super.onInit();
   }
 
-  ads() async {
+  //
+  Future<void> ads() async {
     await getIt<AdService>()
-        .getAd(adType: AdService.interstitialAd)
+        .getAd(
+      adType: AdService.interstitialAd,
+    )
         .then((value) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       if (!value) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Get.back();
@@ -90,21 +104,31 @@ class ShowPostPageController extends GetxController {
   addDataToLike({
     required String data,
   }) {
-    likeList.add(data);
+    if (!likeList.contains(data)) {
+      likeList.add(data);
+    }
     box.write(ArgumentConstant.likeList, jsonEncode(likeList));
+    homeController!.post[Index.value].isLiked!.value = true;
+    update();
+
     print(box.read(ArgumentConstant.likeList));
   }
 
   removeDataToLike({required String data}) {
-    likeList.remove(data);
+    if (likeList.contains(data)) {
+      likeList.remove(data);
+    }
+
     box.write(ArgumentConstant.likeList, jsonEncode(likeList));
+    homeController!.post[Index.value].isLiked!.value = false;
+    update();
     print(box.read(ArgumentConstant.likeList));
   }
 
   @override
   void onClose() {
     super.onClose();
-    if (!isNullEmptyOrFalse(postData!.videoThumbnail)) {
+    if (!isNullEmptyOrFalse(homeController!.post[Index.value].videoThumbnail)) {
       flickManager!.value.dispose();
     }
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

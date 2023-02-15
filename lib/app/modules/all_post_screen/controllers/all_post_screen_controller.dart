@@ -10,15 +10,19 @@ import '../../../../main.dart';
 import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/timer_service.dart';
 import '../../../routes/app_pages.dart';
+import '../../home/controllers/home_controller.dart';
 
 class AllPostScreenController extends GetxController {
   List likeList = [];
-
+  HomeController? homeController;
   @override
   void onInit() {
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }
+    Get.lazyPut(() => HomeController());
+    homeController = Get.find<HomeController>();
+    update();
     if (getIt<TimerService>().is40SecCompleted) {
       ads();
     }
@@ -26,11 +30,12 @@ class AllPostScreenController extends GetxController {
       switch (event) {
         case Yodo1MAS.AD_EVENT_OPENED:
           print('Interstitial AD_EVENT_OPENED');
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
           break;
         case Yodo1MAS.AD_EVENT_ERROR:
           getIt<TimerService>().verifyTimer();
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          Get.offAllNamed(Routes.HOME);
+          Get.back();
           print('Interstitial AD_EVENT_ERROR' + message);
           break;
         case Yodo1MAS.AD_EVENT_CLOSED:
