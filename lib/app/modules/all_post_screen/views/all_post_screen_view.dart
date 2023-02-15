@@ -82,9 +82,23 @@ class AllPostScreenView extends GetWidget<AllPostScreenController> {
                                     ? null
                                     : GestureDetector(
                                         onTap: () {
+                                          int i = 0;
+                                          int Index = 0;
+                                          controller.homeController!.post
+                                              .forEach((element) {
+                                            if (element.uId ==
+                                                controller.homeController!.post
+                                                    .where((e) =>
+                                                        e.isDaily!.isFalse)
+                                                    .toList()[index]
+                                                    .uId) {
+                                              Index = i;
+                                            }
+                                            i++;
+                                          });
                                           Get.toNamed(Routes.SHOW_POST_PAGE,
                                               arguments: {
-                                                ArgumentConstant.index: index,
+                                                ArgumentConstant.index: Index,
                                                 ArgumentConstant.isFromHome:
                                                     false,
                                                 ArgumentConstant.isFromLike:

@@ -94,22 +94,30 @@ class HomeView extends GetView<HomeController> {
                                   child: GridView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        crossAxisSpacing:
-                                        MySize.getHeight(10.0),
-                                        mainAxisSpacing:
-                                        MySize.getHeight(10.0)),
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 1,
+                                            crossAxisSpacing:
+                                                MySize.getHeight(10.0),
+                                            mainAxisSpacing:
+                                                MySize.getHeight(10.0)),
                                     itemBuilder: (context, index) {
                                       print(DateTime.now());
-                                      print(controller.post.where((e) => e.isDaily!.isTrue).toList()[index].mediaLink);
-                                      if (!isNullEmptyOrFalse(
-                                          controller.post.where((e) => e.isDaily!.isTrue).toList()[index].videoThumbnail)) {
-                                        controller.mediaLink!.value =
-                                        controller.post.where((e) => e.isDaily!.isTrue).toList()[index].mediaLink!;
+                                      print(controller.post
+                                          .where((e) => e.isDaily!.isTrue)
+                                          .toList()[index]
+                                          .mediaLink);
+                                      if (!isNullEmptyOrFalse(controller.post
+                                          .where((e) => e.isDaily!.isTrue)
+                                          .toList()[index]
+                                          .videoThumbnail)) {
+                                        controller.mediaLink!.value = controller
+                                            .post
+                                            .where((e) => e.isDaily!.isTrue)
+                                            .toList()[index]
+                                            .mediaLink!;
                                         controller.getVideo(
                                             mediaLink:
-                                            controller.mediaLink!.value);
+                                                controller.mediaLink!.value);
                                         controller.isVideo.value = true;
                                       }
                                       if (controller.isTaped.isTrue) {
@@ -121,10 +129,16 @@ class HomeView extends GetView<HomeController> {
                                           Expanded(
                                             child: GestureDetector(
                                               onTap: () {
-                                                int i=0;
+                                                int i = 0;
                                                 int Index = 0;
-                                                controller.post.forEach((element) {
-                                                  if(element.uId==controller.post.where((e) => e.isDaily!.isTrue).toList()[index].uId){
+                                                controller.post
+                                                    .forEach((element) {
+                                                  if (element.uId ==
+                                                      controller.post
+                                                          .where((e) =>
+                                                              e.isDaily!.isTrue)
+                                                          .toList()[index]
+                                                          .uId) {
                                                     Index = i;
                                                   }
                                                   i++;
@@ -132,7 +146,8 @@ class HomeView extends GetView<HomeController> {
                                                 Get.toNamed(
                                                     Routes.SHOW_POST_PAGE,
                                                     arguments: {
-                                                      ArgumentConstant.index:Index,
+                                                      ArgumentConstant.index:
+                                                          Index,
                                                       ArgumentConstant
                                                           .isFromHome: true,
                                                       ArgumentConstant
@@ -140,127 +155,126 @@ class HomeView extends GetView<HomeController> {
                                                     });
                                               },
                                               child: Container(
-                                                decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                        color:
-                                                        Color(0xff1818181F),
-                                                        spreadRadius: 0,
-                                                        blurRadius: 20,
-                                                        offset: Offset(0,
-                                                            4) // changes position of shadow
-                                                    ),
-                                                  ],
-                                                ),
                                                 child: Padding(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal:
-                                                      MySize.getWidth(15)),
+                                                          MySize.getWidth(15)),
                                                   child: Column(
                                                     children: [
                                                       Container(
                                                         height:
-                                                        MySize.getHeight(
-                                                            315),
+                                                            MySize.getHeight(
+                                                                315),
                                                         width: MySize.getWidth(
                                                             320),
                                                         child: (!isNullEmptyOrFalse(
-                                                            controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
-                                                                .videoThumbnail))
+                                                                controller.post
+                                                                    .where((e) => e
+                                                                        .isDaily!
+                                                                        .isTrue)
+                                                                    .toList()[
+                                                                        index]
+                                                                    .videoThumbnail))
                                                             ? Obx(() {
-                                                          return GestureDetector(
-                                                            onTap: () {
-                                                              controller
-                                                                  .isTaped
-                                                                  .toggle();
+                                                                return GestureDetector(
+                                                                  onTap: () {
+                                                                    controller
+                                                                        .isTaped
+                                                                        .toggle();
 
-                                                              if (controller
-                                                                  .isTaped
-                                                                  .isTrue) {
-                                                                controller
-                                                                    .hide();
-                                                              }
-                                                            },
-                                                            child:
-                                                            Container(
-                                                              child: (controller.flickManager ==
-                                                                  null)
-                                                                  ? Visibility(
-                                                                visible:
-                                                                controller.isTaped.value,
-                                                                child:
-                                                                Center(
-                                                                  child: CircularProgressIndicator(),
-                                                                ),
-                                                              )
-                                                                  : Container(
-                                                                height:
-                                                                MySize.getHeight(610),
-                                                                width:
-                                                                MySize.getWidth(320),
-                                                                child:
-                                                                ClipRRect(
-                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(MySize.getHeight(12)), topRight: Radius.circular(MySize.getHeight(12))),
-                                                                  child: FlickVideoPlayer(
-                                                                      flickVideoWithControls: FlickVideoWithControls(
-                                                                        controls: Visibility(
-                                                                          visible: controller.isTaped.value,
-                                                                          child: Center(
-                                                                            child: FlickPlayToggle(size: MySize.getHeight(35)),
+                                                                    if (controller
+                                                                        .isTaped
+                                                                        .isTrue) {
+                                                                      controller
+                                                                          .hide();
+                                                                    }
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    child: (controller.flickManager ==
+                                                                            null)
+                                                                        ? Visibility(
+                                                                            visible:
+                                                                                controller.isTaped.value,
+                                                                            child:
+                                                                                Center(
+                                                                              child: CircularProgressIndicator(),
+                                                                            ),
+                                                                          )
+                                                                        : Container(
+                                                                            height:
+                                                                                MySize.getHeight(610),
+                                                                            width:
+                                                                                MySize.getWidth(320),
+                                                                            child:
+                                                                                ClipRRect(
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(MySize.getHeight(12)), topRight: Radius.circular(MySize.getHeight(12))),
+                                                                              child: FlickVideoPlayer(
+                                                                                  flickVideoWithControls: FlickVideoWithControls(
+                                                                                    controls: Visibility(
+                                                                                      visible: controller.isTaped.value,
+                                                                                      child: Center(
+                                                                                        child: FlickPlayToggle(size: MySize.getHeight(35)),
+                                                                                      ),
+                                                                                    ),
+                                                                                    videoFit: BoxFit.fitHeight,
+                                                                                  ),
+                                                                                  flickManager: controller.flickManager!.value),
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                        videoFit: BoxFit.fitHeight,
-                                                                      ),
-                                                                      flickManager: controller.flickManager!.value),
+                                                                  ),
+                                                                );
+                                                              })
+                                                            : Container(
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius.circular(
+                                                                          MySize.getHeight(
+                                                                              12)),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              MySize.getHeight(12))),
+                                                                  child: getImageByLink(
+                                                                      url: controller
+                                                                          .post
+                                                                          .where((e) => e
+                                                                              .isDaily!
+                                                                              .isTrue)
+                                                                          .toList()[
+                                                                              index]
+                                                                          .mediaLink!,
+                                                                      height:
+                                                                          MySize.getHeight(
+                                                                              325),
+                                                                      width: MySize
+                                                                          .getWidth(
+                                                                              320),
+                                                                      boxFit: BoxFit
+                                                                          .cover),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          );
-                                                        })
-                                                            : Container(
-                                                          child:
-                                                          ClipRRect(
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius.circular(
-                                                                    MySize.getHeight(
-                                                                        12)),
-                                                                topRight:
-                                                                Radius.circular(
-                                                                    MySize.getHeight(12))),
-                                                            child: getImageByLink(
-                                                                url: controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
-                                                                    .mediaLink!,
-                                                                height: MySize
-                                                                    .getHeight(
-                                                                    325),
-                                                                width: MySize
-                                                                    .getWidth(
-                                                                    320),
-                                                                boxFit: BoxFit
-                                                                    .cover),
-                                                          ),
-                                                        ),
                                                       ),
                                                       Container(
                                                         height:
-                                                        MySize.getHeight(
-                                                            50),
+                                                            MySize.getHeight(
+                                                                50),
                                                         decoration:
-                                                        BoxDecoration(
-                                                            color: Colors
-                                                                .white,
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .only(
-                                                              bottomLeft: Radius
-                                                                  .circular(
-                                                                  MySize.getHeight(
-                                                                      12)),
-                                                              bottomRight: Radius
-                                                                  .circular(
-                                                                  MySize.getHeight(
-                                                                      12)),
-                                                            )),
+                                                            BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          MySize.getHeight(
+                                                                              12)),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          MySize.getHeight(
+                                                                              12)),
+                                                                )),
                                                         child: Row(
                                                           children: [
                                                             SizedBox(
@@ -270,43 +284,68 @@ class HomeView extends GetView<HomeController> {
                                                             Obx(() {
                                                               return InkWell(
                                                                 onTap: () {
-                                                                  controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                  controller
+                                                                      .post
+                                                                      .where((e) => e
+                                                                          .isDaily!
+                                                                          .isTrue)
+                                                                      .toList()[
+                                                                          index]
                                                                       .isLiked!
                                                                       .toggle();
-                                                                  if (controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                  if (controller
+                                                                      .post
+                                                                      .where((e) => e
+                                                                          .isDaily!
+                                                                          .isTrue)
+                                                                      .toList()[
+                                                                          index]
                                                                       .isLiked!
                                                                       .isTrue) {
                                                                     controller.addDataToLike(
-                                                                        data: controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                        data: controller
+                                                                            .post
+                                                                            .where((e) =>
+                                                                                e.isDaily!.isTrue)
+                                                                            .toList()[index]
                                                                             .uId
                                                                             .toString()
                                                                             .trim());
                                                                   } else {
-
                                                                     controller.removeDataToLike(
-                                                                        data: controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                        data: controller
+                                                                            .post
+                                                                            .where((e) =>
+                                                                                e.isDaily!.isTrue)
+                                                                            .toList()[index]
                                                                             .uId
                                                                             .toString()
                                                                             .trim());
                                                                   }
                                                                 },
-                                                                child: (controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
-                                                                    .isLiked!
-                                                                    .isTrue)
+                                                                child: (controller
+                                                                        .post
+                                                                        .where((e) => e
+                                                                            .isDaily!
+                                                                            .isTrue)
+                                                                        .toList()[
+                                                                            index]
+                                                                        .isLiked!
+                                                                        .isTrue)
                                                                     ? SvgPicture
-                                                                    .asset(
-                                                                  imagePath +
-                                                                      "likeFill.svg",
-                                                                  height:
-                                                                  MySize.getHeight(22.94),
-                                                                )
+                                                                        .asset(
+                                                                        imagePath +
+                                                                            "likeFill.svg",
+                                                                        height:
+                                                                            MySize.getHeight(22.94),
+                                                                      )
                                                                     : SvgPicture
-                                                                    .asset(
-                                                                  imagePath +
-                                                                      "like.svg",
-                                                                  height:
-                                                                  MySize.getHeight(22.94),
-                                                                ),
+                                                                        .asset(
+                                                                        imagePath +
+                                                                            "like.svg",
+                                                                        height:
+                                                                            MySize.getHeight(22.94),
+                                                                      ),
                                                               );
                                                             }),
                                                             SizedBox(
@@ -317,103 +356,118 @@ class HomeView extends GetView<HomeController> {
                                                               onTap: () async {
                                                                 controller
                                                                     .ads();
-                                                                if (isNullEmptyOrFalse(
-                                                                    controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
-                                                                        .videoThumbnail)) {
-                                                                  String path =
-                                                                  controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                if (isNullEmptyOrFalse(controller
+                                                                    .post
+                                                                    .where((e) => e
+                                                                        .isDaily!
+                                                                        .isTrue)
+                                                                    .toList()[
+                                                                        index]
+                                                                    .videoThumbnail)) {
+                                                                  String path = controller
+                                                                      .post
+                                                                      .where((e) => e
+                                                                          .isDaily!
+                                                                          .isTrue)
+                                                                      .toList()[
+                                                                          index]
                                                                       .mediaLink
                                                                       .toString();
                                                                   print(path);
                                                                   print(GallerySaver
                                                                       .pleaseProvidePath);
                                                                   GallerySaver
-                                                                      .saveImage(
-                                                                      path)
+                                                                          .saveImage(
+                                                                              path)
                                                                       .then(
                                                                           (value) {
-                                                                        Fluttertoast.showToast(
-                                                                            msg:
+                                                                    Fluttertoast.showToast(
+                                                                        msg:
                                                                             "Success!",
-                                                                            toastLength:
+                                                                        toastLength:
                                                                             Toast
                                                                                 .LENGTH_SHORT,
-                                                                            gravity:
+                                                                        gravity:
                                                                             ToastGravity
                                                                                 .BOTTOM,
-                                                                            timeInSecForIosWeb:
+                                                                        timeInSecForIosWeb:
                                                                             1,
-                                                                            textColor:
+                                                                        textColor:
                                                                             Colors
                                                                                 .white,
-                                                                            fontSize:
+                                                                        fontSize:
                                                                             16.0);
-                                                                      }).catchError(
+                                                                  }).catchError(
                                                                           (error) {
-                                                                        Fluttertoast.showToast(
-                                                                            msg:
+                                                                    Fluttertoast.showToast(
+                                                                        msg:
                                                                             "Something went wrong!",
-                                                                            toastLength:
+                                                                        toastLength:
                                                                             Toast
                                                                                 .LENGTH_SHORT,
-                                                                            gravity:
+                                                                        gravity:
                                                                             ToastGravity
                                                                                 .BOTTOM,
-                                                                            timeInSecForIosWeb:
+                                                                        timeInSecForIosWeb:
                                                                             1,
-                                                                            textColor:
+                                                                        textColor:
                                                                             Colors
                                                                                 .white,
-                                                                            fontSize:
+                                                                        fontSize:
                                                                             16.0);
-                                                                      });
+                                                                  });
                                                                   ;
                                                                 } else {
-                                                                  String path =
-                                                                  controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                  String path = controller
+                                                                      .post
+                                                                      .where((e) => e
+                                                                          .isDaily!
+                                                                          .isTrue)
+                                                                      .toList()[
+                                                                          index]
                                                                       .mediaLink
                                                                       .toString();
                                                                   print(path);
                                                                   GallerySaver
-                                                                      .saveVideo(
-                                                                      path)
+                                                                          .saveVideo(
+                                                                              path)
                                                                       .then(
                                                                           (value) {
-                                                                        Fluttertoast.showToast(
-                                                                            msg:
+                                                                    Fluttertoast.showToast(
+                                                                        msg:
                                                                             "Success!",
-                                                                            toastLength:
+                                                                        toastLength:
                                                                             Toast
                                                                                 .LENGTH_SHORT,
-                                                                            gravity:
+                                                                        gravity:
                                                                             ToastGravity
                                                                                 .BOTTOM,
-                                                                            timeInSecForIosWeb:
+                                                                        timeInSecForIosWeb:
                                                                             1,
-                                                                            textColor:
+                                                                        textColor:
                                                                             Colors
                                                                                 .white,
-                                                                            fontSize:
+                                                                        fontSize:
                                                                             16.0);
-                                                                      }).catchError(
+                                                                  }).catchError(
                                                                           (error) {
-                                                                        Fluttertoast.showToast(
-                                                                            msg:
+                                                                    Fluttertoast.showToast(
+                                                                        msg:
                                                                             "Something went wrong!",
-                                                                            toastLength:
+                                                                        toastLength:
                                                                             Toast
                                                                                 .LENGTH_SHORT,
-                                                                            gravity:
+                                                                        gravity:
                                                                             ToastGravity
                                                                                 .BOTTOM,
-                                                                            timeInSecForIosWeb:
+                                                                        timeInSecForIosWeb:
                                                                             1,
-                                                                            textColor:
+                                                                        textColor:
                                                                             Colors
                                                                                 .white,
-                                                                            fontSize:
+                                                                        fontSize:
                                                                             16.0);
-                                                                      });
+                                                                  });
                                                                 }
                                                               },
                                                               child: SvgPicture
@@ -422,7 +476,7 @@ class HomeView extends GetView<HomeController> {
                                                                     "down.svg",
                                                                 height: MySize
                                                                     .getHeight(
-                                                                    22.94),
+                                                                        22.94),
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -433,19 +487,24 @@ class HomeView extends GetView<HomeController> {
                                                               onTap: () async {
                                                                 getIt<CustomDialogs>()
                                                                     .showCircularDialog(
-                                                                    context);
+                                                                        context);
                                                                 File? file;
                                                                 await DefaultCacheManager()
-                                                                    .getSingleFile(
-                                                                    controller.post.where((e) => e.isDaily!.isTrue).toList()[index]
+                                                                    .getSingleFile(controller
+                                                                        .post
+                                                                        .where((e) => e
+                                                                            .isDaily!
+                                                                            .isTrue)
+                                                                        .toList()[
+                                                                            index]
                                                                         .mediaLink!)
                                                                     .then(
                                                                         (value) {
-                                                                      getIt<CustomDialogs>()
-                                                                          .hideCircularDialog(
+                                                                  getIt<CustomDialogs>()
+                                                                      .hideCircularDialog(
                                                                           context);
-                                                                      file = value;
-                                                                    });
+                                                                  file = value;
+                                                                });
                                                                 Share
                                                                     .shareFiles([
                                                                   file!.path
@@ -457,7 +516,7 @@ class HomeView extends GetView<HomeController> {
                                                                     "share.svg",
                                                                 height: MySize
                                                                     .getHeight(
-                                                                    22.94),
+                                                                        22.94),
                                                               ),
                                                             ),
                                                           ],
@@ -472,7 +531,16 @@ class HomeView extends GetView<HomeController> {
                                         ],
                                       );
                                     },
-                                    itemCount: (controller.post.where((e) => e.isDaily!.isTrue).toList().length<1)?controller.post.where((e) => e.isDaily!.isTrue).toList().length:1,
+                                    itemCount: (controller.post
+                                                .where((e) => e.isDaily!.isTrue)
+                                                .toList()
+                                                .length <
+                                            1)
+                                        ? controller.post
+                                            .where((e) => e.isDaily!.isTrue)
+                                            .toList()
+                                            .length
+                                        : 1,
                                   ),
                                 ),
                               ],
@@ -483,7 +551,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     getIt<AdService>().getBanners(),
-
                     Padding(
                       padding: EdgeInsets.only(
                           left: MySize.getWidth(10),
@@ -572,10 +639,10 @@ class HomeView extends GetView<HomeController> {
                         children: [
                           Expanded(
                             child: Container(
-                              child:  GridView.builder(
+                              child: GridView.builder(
                                 shrinkWrap: true,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 3,
                                   crossAxisSpacing: MySize.getHeight(2),
                                   mainAxisSpacing: MySize.getHeight(2),
@@ -586,72 +653,138 @@ class HomeView extends GetView<HomeController> {
                                   //       .isLiked!.value = true;
                                   // }
                                   print(DateTime.now().microsecondsSinceEpoch);
-                                  return(controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                      .isDaily!.isTrue)?null: GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(Routes.SHOW_POST_PAGE,
-                                          arguments: {
-                                            ArgumentConstant.index: index,
-                                            ArgumentConstant.isFromHome: true,
-                                            ArgumentConstant.isFromLike: false,
-                                          });
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                            height: MySize.safeHeight,
-                                            width: MySize.safeWidth,
-                                            color: Colors.black,
-                                            child: getImageByLink(
-                                                url: (!isNullEmptyOrFalse(
-                                                    controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                                        .videoThumbnail))
-                                                    ? controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                                    .videoThumbnail
-                                                    .toString()
-                                                    :controller.post.where((e) => e.isDaily!.isFalse).toList()[index].mediaLink
-                                                    .toString(),
-                                                height: MySize.getHeight(25),
-                                                width: MySize.getWidth(25),
-                                                boxFit: BoxFit.cover)),
-                                        (!isNullEmptyOrFalse(controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                            .videoThumbnail))
-                                            ? Positioned(
-                                          top: MySize.getHeight(10),
-                                          right: MySize.getHeight(10),
-                                          child: Container(
-                                            child: SvgPicture.asset(
-                                                imagePath + "video.svg",
-                                                color: Colors.white),
-                                            height: MySize.getHeight(25),
-                                            width: MySize.getWidth(25),
+                                  return (controller.post
+                                          .where((e) => e.isDaily!.isFalse)
+                                          .toList()[index]
+                                          .isDaily!
+                                          .isTrue)
+                                      ? null
+                                      : GestureDetector(
+                                          onTap: () {
+                                            int i = 0;
+                                            int Index = 0;
+                                            controller.post.forEach((element) {
+                                              if (element.uId ==
+                                                  controller.post
+                                                      .where((e) =>
+                                                          e.isDaily!.isFalse)
+                                                      .toList()[index]
+                                                      .uId) {
+                                                Index = i;
+                                              }
+                                              i++;
+                                            });
+                                            Get.toNamed(Routes.SHOW_POST_PAGE,
+                                                arguments: {
+                                                  ArgumentConstant.index: Index,
+                                                  ArgumentConstant.isFromHome:
+                                                      true,
+                                                  ArgumentConstant.isFromLike:
+                                                      false,
+                                                });
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                  height: MySize.safeHeight,
+                                                  width: MySize.safeWidth,
+                                                  color: Colors.black,
+                                                  child: getImageByLink(
+                                                      url: (!isNullEmptyOrFalse(
+                                                              controller.post
+                                                                  .where((e) => e
+                                                                      .isDaily!
+                                                                      .isFalse)
+                                                                  .toList()[
+                                                                      index]
+                                                                  .videoThumbnail))
+                                                          ? controller.post
+                                                              .where((e) => e
+                                                                  .isDaily!
+                                                                  .isFalse)
+                                                              .toList()[index]
+                                                              .videoThumbnail
+                                                              .toString()
+                                                          : controller.post
+                                                              .where((e) => e
+                                                                  .isDaily!
+                                                                  .isFalse)
+                                                              .toList()[index]
+                                                              .mediaLink
+                                                              .toString(),
+                                                      height: MySize.getHeight(25),
+                                                      width: MySize.getWidth(25),
+                                                      boxFit: BoxFit.cover)),
+                                              (!isNullEmptyOrFalse(controller
+                                                      .post
+                                                      .where((e) =>
+                                                          e.isDaily!.isFalse)
+                                                      .toList()[index]
+                                                      .videoThumbnail))
+                                                  ? Positioned(
+                                                      top: MySize.getHeight(10),
+                                                      right:
+                                                          MySize.getHeight(10),
+                                                      child: Container(
+                                                        child: SvgPicture.asset(
+                                                            imagePath +
+                                                                "video.svg",
+                                                            color:
+                                                                Colors.white),
+                                                        height:
+                                                            MySize.getHeight(
+                                                                25),
+                                                        width:
+                                                            MySize.getWidth(25),
+                                                      ),
+                                                    )
+                                                  : SizedBox(),
+                                              Obx(() {
+                                                return (!isNullEmptyOrFalse(
+                                                        controller.post
+                                                            .where((e) => e
+                                                                .isDaily!
+                                                                .isFalse)
+                                                            .toList()[index]
+                                                            .isLiked!
+                                                            .value))
+                                                    ? Positioned(
+                                                        bottom:
+                                                            MySize.getHeight(
+                                                                10),
+                                                        right: MySize.getHeight(
+                                                            10),
+                                                        child: Container(
+                                                          child: SvgPicture.asset(
+                                                              imagePath +
+                                                                  "likeFill.svg",
+                                                              color:
+                                                                  Colors.white),
+                                                          height:
+                                                              MySize.getHeight(
+                                                                  15),
+                                                          width:
+                                                              MySize.getWidth(
+                                                                  15),
+                                                        ),
+                                                      )
+                                                    : SizedBox();
+                                              })
+                                            ],
                                           ),
-                                        )
-                                            : SizedBox(),
-                                        Obx(() {
-                                          return (!isNullEmptyOrFalse(controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                              .isLiked!
-                                              .value))
-                                              ? Positioned(
-                                            bottom: MySize.getHeight(10),
-                                            right: MySize.getHeight(10),
-                                            child: Container(
-                                              child: SvgPicture.asset(
-                                                  imagePath +
-                                                      "likeFill.svg",
-                                                  color: Colors.white),
-                                              height: MySize.getHeight(15),
-                                              width: MySize.getWidth(15),
-                                            ),
-                                          )
-                                              : SizedBox();
-                                        })
-                                      ],
-                                    ),
-                                  );
+                                        );
                                 },
-                                itemCount:
-                                (controller.post.where((e) => e.isDaily!.isFalse).toList().length<15)?controller.post.where((e) => e.isDaily!.isFalse).toList().length:15,),
+                                itemCount: (controller.post
+                                            .where((e) => e.isDaily!.isFalse)
+                                            .toList()
+                                            .length <
+                                        15)
+                                    ? controller.post
+                                        .where((e) => e.isDaily!.isFalse)
+                                        .toList()
+                                        .length
+                                    : 15,
+                              ),
                             ),
                           ),
                         ],
@@ -669,7 +802,7 @@ class HomeView extends GetView<HomeController> {
                           return SizedBox();
                         } else {
                           AdService.isVisible.value =
-                          data.data!.docs[0]["isVisible"];
+                              data.data!.docs[0]["isVisible"];
                           return SizedBox();
                         }
                       },
