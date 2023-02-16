@@ -653,126 +653,101 @@ class HomeView extends GetView<HomeController> {
                                   //       .isLiked!.value = true;
                                   // }
                                   print(DateTime.now().microsecondsSinceEpoch);
-                                  return (controller.post
-                                          .where((e) => e.isDaily!.isFalse)
-                                          .toList()[index]
-                                          .isDaily!
-                                          .isTrue)
-                                      ? null
-                                      : GestureDetector(
-                                          onTap: () {
-                                            int i = 0;
-                                            int Index = 0;
-                                            controller.post.forEach((element) {
-                                              if (element.uId ==
-                                                  controller.post
-                                                      .where((e) =>
-                                                          e.isDaily!.isFalse)
-                                                      .toList()[index]
-                                                      .uId) {
-                                                Index = i;
-                                              }
-                                              i++;
-                                            });
-                                            Get.toNamed(Routes.SHOW_POST_PAGE,
-                                                arguments: {
-                                                  ArgumentConstant.index: Index,
-                                                  ArgumentConstant.isFromHome:
-                                                      true,
-                                                  ArgumentConstant.isFromLike:
-                                                      false,
-                                                });
-                                          },
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                  height: MySize.safeHeight,
-                                                  width: MySize.safeWidth,
-                                                  color: Colors.black,
-                                                  child: getImageByLink(
-                                                      url: (!isNullEmptyOrFalse(
-                                                              controller.post
-                                                                  .where((e) => e
-                                                                      .isDaily!
-                                                                      .isFalse)
-                                                                  .toList()[
-                                                                      index]
-                                                                  .videoThumbnail))
-                                                          ? controller.post
-                                                              .where((e) => e
-                                                                  .isDaily!
-                                                                  .isFalse)
-                                                              .toList()[index]
-                                                              .videoThumbnail
-                                                              .toString()
-                                                          : controller.post
-                                                              .where((e) => e
-                                                                  .isDaily!
-                                                                  .isFalse)
-                                                              .toList()[index]
-                                                              .mediaLink
-                                                              .toString(),
-                                                      height: MySize.getHeight(25),
-                                                      width: MySize.getWidth(25),
-                                                      boxFit: BoxFit.cover)),
-                                              (!isNullEmptyOrFalse(controller
-                                                      .post
-                                                      .where((e) =>
-                                                          e.isDaily!.isFalse)
-                                                      .toList()[index]
-                                                      .videoThumbnail))
-                                                  ? Positioned(
-                                                      top: MySize.getHeight(10),
-                                                      right:
-                                                          MySize.getHeight(10),
-                                                      child: Container(
-                                                        child: SvgPicture.asset(
-                                                            imagePath +
-                                                                "video.svg",
-                                                            color:
-                                                                Colors.white),
-                                                        height:
-                                                            MySize.getHeight(
-                                                                25),
-                                                        width:
-                                                            MySize.getWidth(25),
-                                                      ),
-                                                    )
-                                                  : SizedBox(),
-                                              Obx(() {
-                                                return (!isNullEmptyOrFalse(
-                                                        controller.post
+                                  return GestureDetector(
+                                    onTap: () {
+                                      int i = 0;
+                                      int Index = 0;
+                                      controller.post.forEach((element) {
+                                        if (element.uId ==
+                                            controller.post
+                                                .where(
+                                                    (e) => e.isDaily!.isFalse)
+                                                .toList()[index]
+                                                .uId) {
+                                          Index = i;
+                                        }
+                                        i++;
+                                      });
+                                      Get.toNamed(Routes.SHOW_POST_PAGE,
+                                          arguments: {
+                                            ArgumentConstant.index: Index,
+                                            ArgumentConstant.isFromHome: true,
+                                            ArgumentConstant.isFromLike: false,
+                                          });
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                            height: MySize.safeHeight,
+                                            width: MySize.safeWidth,
+                                            color: Colors.black,
+                                            child: getImageByLink(
+                                                url: (!isNullEmptyOrFalse(
+                                                        controller
+                                                            .post
                                                             .where((e) => e
                                                                 .isDaily!
                                                                 .isFalse)
                                                             .toList()[index]
-                                                            .isLiked!
-                                                            .value))
-                                                    ? Positioned(
-                                                        bottom:
-                                                            MySize.getHeight(
-                                                                10),
-                                                        right: MySize.getHeight(
-                                                            10),
-                                                        child: Container(
-                                                          child: SvgPicture.asset(
-                                                              imagePath +
-                                                                  "likeFill.svg",
-                                                              color:
-                                                                  Colors.white),
-                                                          height:
-                                                              MySize.getHeight(
-                                                                  15),
-                                                          width:
-                                                              MySize.getWidth(
-                                                                  15),
-                                                        ),
-                                                      )
-                                                    : SizedBox();
-                                              })
-                                            ],
-                                          ),
-                                        );
+                                                            .videoThumbnail))
+                                                    ? controller.post
+                                                        .where((e) =>
+                                                            e.isDaily!.isFalse)
+                                                        .toList()[index]
+                                                        .videoThumbnail
+                                                        .toString()
+                                                    : controller.post
+                                                        .where((e) =>
+                                                            e.isDaily!.isFalse)
+                                                        .toList()[index]
+                                                        .mediaLink
+                                                        .toString(),
+                                                height: MySize.getHeight(25),
+                                                width: MySize.getWidth(25),
+                                                boxFit: BoxFit.cover)),
+                                        (!isNullEmptyOrFalse(controller.post
+                                                .where(
+                                                    (e) => e.isDaily!.isFalse)
+                                                .toList()[index]
+                                                .videoThumbnail))
+                                            ? Positioned(
+                                                top: MySize.getHeight(10),
+                                                right: MySize.getHeight(10),
+                                                child: Container(
+                                                  child: SvgPicture.asset(
+                                                      imagePath + "video.svg",
+                                                      color: Colors.white),
+                                                  height: MySize.getHeight(25),
+                                                  width: MySize.getWidth(25),
+                                                ),
+                                              )
+                                            : SizedBox(),
+                                        Obx(() {
+                                          return (!isNullEmptyOrFalse(controller
+                                                  .post
+                                                  .where(
+                                                      (e) => e.isDaily!.isFalse)
+                                                  .toList()[index]
+                                                  .isLiked!
+                                                  .value))
+                                              ? Positioned(
+                                                  bottom: MySize.getHeight(10),
+                                                  right: MySize.getHeight(10),
+                                                  child: Container(
+                                                    child: SvgPicture.asset(
+                                                        imagePath +
+                                                            "likeFill.svg",
+                                                        color: Colors.white),
+                                                    height:
+                                                        MySize.getHeight(15),
+                                                    width: MySize.getWidth(15),
+                                                  ),
+                                                )
+                                              : SizedBox();
+                                        })
+                                      ],
+                                    ),
+                                  );
                                 },
                                 itemCount: (controller.post
                                             .where((e) => e.isDaily!.isFalse)
