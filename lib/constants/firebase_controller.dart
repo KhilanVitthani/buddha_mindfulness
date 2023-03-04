@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:buddha_mindfulness/utilities/ad_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../app/models/daily_thought_model.dart';
@@ -62,9 +65,16 @@ class FireController {
         .update({"isSave": status});
   }
 
-  Stream<QuerySnapshot> adsVisible() {
+  Future<bool> adsVisible() async {
     print('getMessage');
-    return _adsReferance.snapshots();
+    QuerySnapshot querySnapshot = await _adsReferance.get();
+    querySnapshot.docs.forEach((doc) {
+      QueryDocumentSnapshot docu = doc;
+      print(docu.data() as Map<String, dynamic>);
+      Map m = docu.data() as Map<String, dynamic>;
+      AdService.isVisible.value = m['isVisible'];
+    });
+    return AdService.isVisible.value;
   }
 
   Future<void> addData() async {

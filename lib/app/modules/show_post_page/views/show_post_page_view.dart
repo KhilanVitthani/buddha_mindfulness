@@ -268,7 +268,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                             Positioned(
                               bottom: MySize.getHeight(5),
                               left: MySize.getWidth(25),
-                              child: getIt<AdService>().getBanners(),
+                              child: getIt<AdService>().getNative(),
                             )
                           ],
                         )
@@ -284,11 +284,12 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                         child: CircularProgressIndicator(),
                                       )
                                     : Container(
-                                        height: MySize.getHeight(610),
+                                        height: MySize.getHeight(580),
                                         width: MySize.getWidth(320),
                                         child: FlickVideoPlayer(
                                             flickVideoWithControls:
                                                 FlickVideoWithControls(
+                                              videoFit: BoxFit.contain,
                                               controls: FlickPortraitControls(),
                                             ),
                                             flickManager:
@@ -296,7 +297,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                       ),
                               ),
                               SizedBox(
-                                height: MySize.getHeight(25),
+                                height: MySize.getHeight(20),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -451,7 +452,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                 ),
                               ),
                               Spacer(),
-                              getIt<AdService>().getBanners(),
+                              getIt<AdService>().getNative(),
                               SizedBox(
                                 height: 5,
                               ),

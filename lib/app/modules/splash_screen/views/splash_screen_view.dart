@@ -56,20 +56,21 @@ class SplashScreenView extends GetWidget<SplashScreenController> {
                   color: Color(0xffF8D4CE),
                 ),
               ),
-              StreamBuilder<QuerySnapshot>(
-                builder: (context, data) {
-                  if (data.connectionState == ConnectionState.waiting) {
-                    return SizedBox();
-                  } else if (data.hasError) {
-                    print("object");
-                    return SizedBox();
-                  } else {
-                    AdService.isVisible.value = data.data!.docs[0]["isVisible"];
-                    return SizedBox();
-                  }
-                },
-                stream: FireController().adsVisible(),
-              ),
+              // StreamBuilder<QuerySnapshot>(
+              //   builder: (context, data) {
+              //     if (data.connectionState == ConnectionState.waiting) {
+              //       return SizedBox();
+              //     } else if (data.hasError) {
+              //       print("object");
+              //       return SizedBox();
+              //     } else {
+              //       AdService.isVisible.value = data.data!.docs[0]["isVisible"];
+              //       controller.isVisible.value = AdService.isVisible.value;
+              //       return SizedBox();
+              //     }
+              //   },
+              //   stream: FireController().adsVisible(),
+              // ),
             ],
           ),
         ),

@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import 'package:yodo1mas/Yodo1MasBannerAd.dart';
+import 'package:yodo1mas/Yodo1MasNativeAd.dart';
 
 import '../../../../constants/firebase_controller.dart';
 import '../../../../constants/sizeConstant.dart';
@@ -550,7 +551,7 @@ class HomeView extends GetView<HomeController> {
                         stream: FireController().getDailyThought(),
                       ),
                     ),
-                    getIt<AdService>().getBanners(),
+                    getIt<AdService>().getNative(),
                     Padding(
                       padding: EdgeInsets.only(
                           left: MySize.getWidth(10),
@@ -633,7 +634,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     Container(
                       height: (AdService.isVisible.isTrue)
-                          ? MySize.getHeight(240)
+                          ? MySize.getHeight(200)
                           : MySize.getHeight(275),
                       child: Column(
                         children: [
@@ -768,21 +769,21 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       height: MySize.getHeight(10),
                     ),
-                    StreamBuilder<QuerySnapshot>(
-                      builder: (context, data) {
-                        if (data.connectionState == ConnectionState.waiting) {
-                          return SizedBox();
-                        } else if (data.hasError) {
-                          print("object");
-                          return SizedBox();
-                        } else {
-                          AdService.isVisible.value =
-                              data.data!.docs[0]["isVisible"];
-                          return SizedBox();
-                        }
-                      },
-                      stream: FireController().adsVisible(),
-                    ),
+                    // StreamBuilder<QuerySnapshot>(
+                    //   builder: (context, data) {
+                    //     if (data.connectionState == ConnectionState.waiting) {
+                    //       return SizedBox();
+                    //     } else if (data.hasError) {
+                    //       print("object");
+                    //       return SizedBox();
+                    //     } else {
+                    //       AdService.isVisible.value =
+                    //           data.data!.docs[0]["isVisible"];
+                    //       return SizedBox();
+                    //     }
+                    //   },
+                    //   stream: FireController().adsVisible(),
+                    // ),
                   ],
                 ),
               ),

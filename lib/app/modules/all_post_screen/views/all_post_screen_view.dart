@@ -176,7 +176,7 @@ class AllPostScreenView extends GetWidget<AllPostScreenController> {
                                   .length),
                         ),
                       ),
-                      getIt<AdService>().getBanners(),
+                      getIt<AdService>().getNative(),
                     ],
                   ),
                 ),

@@ -60,6 +60,7 @@ class HomeController extends GetxController {
     });
 
     box.write(ArgumentConstant.isFirstTime, false);
+    print(box.read(ArgumentConstant.isFirstTime));
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
     }

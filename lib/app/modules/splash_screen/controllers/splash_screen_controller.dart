@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:buddha_mindfulness/app/routes/app_pages.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
+import 'package:buddha_mindfulness/constants/firebase_controller.dart';
+import 'package:buddha_mindfulness/constants/sizeConstant.dart';
 import 'package:buddha_mindfulness/main.dart';
 import 'package:buddha_mindfulness/utilities/timer_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,15 +15,20 @@ import 'package:yodo1mas/Yodo1MAS.dart';
 import '../../../../utilities/ad_service.dart';
 
 class SplashScreenController extends GetxController {
-  RxBool isFirstTime = false.obs;
+  RxBool isFirstTime = true.obs;
   @override
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      if (box.read(ArgumentConstant.isFirstTime) != null) {
+      await FireController().adsVisible().then((value) {
+        print(value);
+      });
+      if (!isNullEmptyOrFalse(box.read(ArgumentConstant.isFirstTime))) {
         isFirstTime.value = box.read(ArgumentConstant.isFirstTime);
       }
-      if (isFirstTime.value) {
-        Get.offAllNamed(Routes.HOME);
+      if (isNullEmptyOrFalse(isFirstTime)) {
+        Timer(Duration(seconds: 3), () {
+          Get.offAllNamed(Routes.HOME);
+        });
       } else {
         await ads();
       }

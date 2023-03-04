@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:yodo1mas/Yodo1MAS.dart';
 import 'package:yodo1mas/Yodo1MasBannerAd.dart';
+import 'package:yodo1mas/Yodo1MasNativeAd.dart';
 
 import '../constants/firebase_controller.dart';
 
@@ -15,6 +16,9 @@ class AdService {
   static RxBool isVisible = false.obs;
 
   Future<bool> getAd({required String adType}) async {
+    FireController().adsVisible().then((value) {
+      isVisible.value = value;
+    });
     var connectivityResult = await Connectivity().checkConnectivity();
     if (isVisible.isTrue) {
       if (connectivityResult == ConnectivityResult.none) {
@@ -37,9 +41,26 @@ class AdService {
   }
 
   getBanners() {
+    FireController().adsVisible().then((value) {
+      isVisible.value = value;
+    });
     if (isVisible.isTrue) {
+      print("object");
       return Yodo1MASBannerAd(
         size: BannerSize.Banner,
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  getNative() {
+    FireController().adsVisible().then((value) {
+      isVisible.value = value;
+    });
+    if (isVisible.isTrue) {
+      return Yodo1MASNativeAd(
+        size: NativeSize.NativeSmall,
       );
     } else {
       return SizedBox();
