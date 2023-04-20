@@ -99,6 +99,7 @@ class HomeView extends GetView<HomeController> {
                                 children: [
                                   Expanded(
                                     child: GridView.builder(
+                                      shrinkWrap: false,
                                       physics: NeverScrollableScrollPhysics(),
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
@@ -545,7 +546,7 @@ class HomeView extends GetView<HomeController> {
                           stream: FireController().getDailyThought(),
                         ),
                       ),
-                      getIt<AdService>().getNative(),
+                      getIt<AdService>().getBanners(),
                       Padding(
                         padding: EdgeInsets.only(
                             left: MySize.getWidth(10),
