@@ -1,5 +1,4 @@
 import 'package:buddha_mindfulness/constants/color_constant.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -106,12 +105,12 @@ class LikeScreenView extends GetView<LikeScreenController> {
                                           int Index = 0;
                                           controller.homeController!.post
                                               .forEach((element) {
-                                            if (element.uId ==
+                                            if (element.dateTime ==
                                                 controller.homeController!.post
                                                     .where((e) =>
                                                         e.isLiked!.isTrue)
                                                     .toList()[index]
-                                                    .uId) {
+                                                    .dateTime) {
                                               Index = i;
                                             }
                                             i++;

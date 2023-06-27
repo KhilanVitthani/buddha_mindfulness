@@ -45,7 +45,7 @@ class ShowPostPageController extends GetxController {
     }
     if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
       likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
-      if (likeList.contains(homeController!.post[Index.value].uId)) {
+      if (likeList.contains(homeController!.post[Index.value].dateTime!.toString())) {
         homeController!.post[Index.value].isLiked!.value = true;
       }
     }

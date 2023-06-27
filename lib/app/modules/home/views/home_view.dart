@@ -1,12 +1,7 @@
 import 'dart:io';
-
-import 'package:buddha_mindfulness/app/models/daily_thought_model.dart';
-import 'package:buddha_mindfulness/app/models/data_model.dart';
-import 'package:buddha_mindfulness/app/models/save_model.dart';
 import 'package:buddha_mindfulness/app/routes/app_pages.dart';
 import 'package:buddha_mindfulness/constants/api_constants.dart';
 import 'package:buddha_mindfulness/constants/color_constant.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +22,7 @@ import '../../../../main.dart';
 import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/progress_dialog_utils.dart';
 import '../../../../utilities/timer_service.dart';
+import '../../../models/daily_thought_model.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -82,7 +78,7 @@ class HomeView extends GetView<HomeController> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: StreamBuilder<QuerySnapshot>(
+                        child: StreamBuilder(
                           builder: (context, data) {
                             if (data.connectionState ==
                                 ConnectionState.waiting) {
@@ -143,13 +139,13 @@ class HomeView extends GetView<HomeController> {
                                                   int Index = 0;
                                                   controller.post
                                                       .forEach((element) {
-                                                    if (element.uId ==
+                                                    if (element.dateTime ==
                                                         controller.post
                                                             .where((e) => e
                                                                 .isDaily!
                                                                 .isTrue)
                                                             .toList()[index]
-                                                            .uId) {
+                                                            .dateTime) {
                                                       Index = i;
                                                     }
                                                     i++;
@@ -311,7 +307,7 @@ class HomeView extends GetView<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .uId
+                                                                              .dateTime
                                                                               .toString()
                                                                               .trim());
                                                                     } else {
@@ -320,7 +316,7 @@ class HomeView extends GetView<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .uId
+                                                                              .dateTime
                                                                               .toString()
                                                                               .trim());
                                                                     }
@@ -543,7 +539,6 @@ class HomeView extends GetView<HomeController> {
                               );
                             }
                           },
-                          stream: FireController().getDailyThought(),
                         ),
                       ),
                       getIt<AdService>().getBanners(),
@@ -662,12 +657,12 @@ class HomeView extends GetView<HomeController> {
                                               int Index = 0;
                                               controller.post
                                                   .forEach((element) {
-                                                if (element.uId ==
+                                                if (element.dateTime ==
                                                     controller.post
                                                         .where((e) =>
                                                             e.isDaily!.isFalse)
                                                         .toList()[index]
-                                                        .uId) {
+                                                        .dateTime) {
                                                   Index = i;
                                                 }
                                                 i++;

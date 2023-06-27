@@ -36,8 +36,15 @@ class HomeController extends GetxController {
     //     }
     //   }
     // });
+
+    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+    }
     FireController().getPostData().then((value) {
       value.reversed.forEach((element) {
+        if (likeList.contains(element.dateTime.toString())) {
+          element.isLiked!.value = true;
+        }
         if (!post.contains(element)) {
           element.isDaily!.value = false;
           post.add(element);
@@ -49,6 +56,9 @@ class HomeController extends GetxController {
     });
     FireController().getDailyData().then((value) {
       value.reversed.forEach((element) {
+        if (likeList.contains(element.dateTime.toString())) {
+          element.isLiked!.value = true;
+        }
         if (!post.contains(element)) {
           element.isDaily!.value = true;
           post.add(element);
@@ -61,9 +71,6 @@ class HomeController extends GetxController {
 
     box.write(ArgumentConstant.isFirstTime, false);
     print(box.read(ArgumentConstant.isFirstTime));
-    if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
-      likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
-    }
     if (getIt<TimerService>().is40SecCompleted) {
       ads();
     }
