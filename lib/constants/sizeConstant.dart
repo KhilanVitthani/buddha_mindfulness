@@ -239,8 +239,8 @@ CachedNetworkImage getImageByLink(
   return CachedNetworkImage(
     imageUrl: url,
     imageBuilder: (context, imageProvider) => Container(
-      // height: MySize.getHeight(height),
-      // width: MySize.getWidth(width),
+      height: MySize.getHeight(height ?? 0),
+      width: MySize.getWidth(width ?? 0),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: imageProvider,

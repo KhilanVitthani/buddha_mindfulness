@@ -1,36 +1,36 @@
 import 'dart:io';
-import 'package:buddha_mindfulness/app/routes/app_pages.dart';
-import 'package:buddha_mindfulness/constants/api_constants.dart';
-import 'package:buddha_mindfulness/constants/color_constant.dart';
-import 'package:flick_video_player/flick_video_player.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flick_video_player/flick_video_player.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:video_player/video_player.dart';
-import 'package:yodo1mas/Yodo1MasBannerAd.dart';
-import 'package:yodo1mas/Yodo1MasNativeAd.dart';
-
+import '../../../../constants/api_constants.dart';
+import '../../../../constants/color_constant.dart';
 import '../../../../constants/firebase_controller.dart';
 import '../../../../constants/sizeConstant.dart';
 import '../../../../main.dart';
 import '../../../../utilities/ad_service.dart';
 import '../../../../utilities/progress_dialog_utils.dart';
 import '../../../../utilities/timer_service.dart';
-import '../../../models/daily_thought_model.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends GetWidget<HomeController> {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
+    if (getIt<TimerService>().is40SecCompleted) {
+      controller.initInterstitialAdAds();
+    }
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -42,6 +42,11 @@ class HomeView extends GetView<HomeController> {
             return SafeArea(
               child: Scaffold(
                 backgroundColor: Colors.white,
+                // floatingActionButton: FloatingActionButton(
+                //   onPressed: () {
+                //     FireController().deleteData();
+                //   },
+                // ),
                 appBar: AppBar(
                   backgroundColor: Colors.transparent,
                   centerTitle: true,
@@ -55,8 +60,10 @@ class HomeView extends GetView<HomeController> {
                   ),
                   actions: [
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         // FireController().addData();
+                        await getIt<AdService>().bannerAd!.dispose();
+                        await getIt<AdService>().initBannerAds();
                         Get.toNamed(Routes.LIKE_SCREEN);
                       },
                       child: Container(
@@ -78,7 +85,7 @@ class HomeView extends GetView<HomeController> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: StreamBuilder(
+                        child: StreamBuilder<QuerySnapshot>(
                           builder: (context, data) {
                             if (data.connectionState ==
                                 ConnectionState.waiting) {
@@ -91,12 +98,16 @@ class HomeView extends GetView<HomeController> {
                                 style: TextStyle(color: Colors.amber),
                               );
                             } else {
+                              print(controller.post
+                                  .where((e) => e.isDaily!.isTrue)
+                                  .toList()
+                                  .length);
                               return Column(
                                 children: [
                                   Expanded(
                                     child: GridView.builder(
-                                      shrinkWrap: false,
-                                      physics: NeverScrollableScrollPhysics(),
+                                      // shrinkWrap: true,
+                                      // physics: NeverScrollableScrollPhysics(),
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 1,
@@ -106,10 +117,6 @@ class HomeView extends GetView<HomeController> {
                                                   MySize.getHeight(10.0)),
                                       itemBuilder: (context, index) {
                                         print(DateTime.now());
-                                        print(controller.post
-                                            .where((e) => e.isDaily!.isTrue)
-                                            .toList()[index]
-                                            .mediaLink);
                                         if (!isNullEmptyOrFalse(controller.post
                                             .where((e) => e.isDaily!.isTrue)
                                             .toList()[index]
@@ -134,7 +141,7 @@ class HomeView extends GetView<HomeController> {
                                           children: [
                                             Expanded(
                                               child: GestureDetector(
-                                                onTap: () {
+                                                onTap: () async {
                                                   int i = 0;
                                                   int Index = 0;
                                                   controller.post
@@ -150,6 +157,11 @@ class HomeView extends GetView<HomeController> {
                                                     }
                                                     i++;
                                                   });
+                                                  await getIt<AdService>()
+                                                      .bannerAd!
+                                                      .dispose();
+                                                  await getIt<AdService>()
+                                                      .initBannerAds();
                                                   Get.toNamed(
                                                       Routes.SHOW_POST_PAGE,
                                                       arguments: {
@@ -162,6 +174,18 @@ class HomeView extends GetView<HomeController> {
                                                       });
                                                 },
                                                 child: Container(
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          color: Color(
+                                                              0xff1818181F),
+                                                          spreadRadius: 0,
+                                                          blurRadius: 20,
+                                                          offset: Offset(0,
+                                                              4) // changes position of shadow
+                                                          ),
+                                                    ],
+                                                  ),
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsets.symmetric(
@@ -354,8 +378,8 @@ class HomeView extends GetView<HomeController> {
                                                               GestureDetector(
                                                                 onTap:
                                                                     () async {
-                                                                  controller
-                                                                      .ads();
+                                                                  await controller
+                                                                      .initInterstitialAdAds();
                                                                   if (isNullEmptyOrFalse(controller
                                                                       .post
                                                                       .where((e) => e
@@ -539,9 +563,14 @@ class HomeView extends GetView<HomeController> {
                               );
                             }
                           },
+                          stream: FireController().getDailyThought(),
                         ),
                       ),
-                      getIt<AdService>().getBanners(),
+                      (controller.isAddShow.isTrue)
+                          ? getIt<AdService>().isBannerLoaded.isTrue
+                              ? getIt<AdService>().getBannerAds()
+                              : SizedBox()
+                          : SizedBox(),
                       Padding(
                         padding: EdgeInsets.only(
                             left: MySize.getWidth(10),
@@ -560,7 +589,11 @@ class HomeView extends GetView<HomeController> {
                                 ),
                                 Spacer(),
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
+                                    await getIt<AdService>()
+                                        .bannerAd!
+                                        .dispose();
+                                    await getIt<AdService>().initBannerAds();
                                     Get.toNamed(Routes.ALL_POST_SCREEN);
                                   },
                                   child: Container(
@@ -588,37 +621,6 @@ class HomeView extends GetView<HomeController> {
                             Spacing.height(
                               MySize.getHeight(10),
                             ),
-                            // StreamBuilder<QuerySnapshot>(
-                            //   builder: (context, data) {
-                            //     if (data.connectionState ==
-                            //         ConnectionState.waiting) {
-                            //       print("object");
-                            //       return SizedBox();
-                            //     } else if (data.hasError) {
-                            //       print("object");
-                            //       return SizedBox();
-                            //     } else {
-                            //       for (int i = 0;
-                            //           i < data.data!.docs.length;
-                            //           i++) {
-                            //         dailyThoughtModel dataModel =
-                            //             dailyThoughtModel.fromJson(
-                            //           data.data!
-                            //               .docs[data.data!.docs.length - i - 1]
-                            //               .data() as Map<String, dynamic>,
-                            //         );
-                            //         (controller.post.length >=
-                            //                 data.data!.docs.length)
-                            //             ? null
-                            //             : controller.post.add(dataModel);
-                            //       }
-                            //         controller.post.refresh();
-                            //       print(controller.post.length);
-                            //       return SizedBox();
-                            //     }
-                            //   },
-                            //   stream: FireController().getPost(),
-                            // ),
                           ],
                         ),
                       ),
@@ -639,12 +641,10 @@ class HomeView extends GetView<HomeController> {
                                     mainAxisSpacing: MySize.getHeight(2),
                                   ),
                                   itemBuilder: (context, index) {
-                                    // if (controller.likeList.contains(controller.post.where((e) => e.isDaily!.isFalse).toList()[index].uId)) {
-                                    //   controller.post.where((e) => e.isDaily!.isFalse).toList()[index]
-                                    //       .isLiked!.value = true;
-                                    // }
-                                    print(
-                                        DateTime.now().microsecondsSinceEpoch);
+                                    print(controller.post
+                                        .where((e) => e.isDaily!.isFalse)
+                                        .toList()[index]
+                                        .dateTime);
                                     return (controller.post
                                             .where((e) => e.isDaily!.isFalse)
                                             .toList()[index]
@@ -652,7 +652,7 @@ class HomeView extends GetView<HomeController> {
                                             .isTrue)
                                         ? null
                                         : GestureDetector(
-                                            onTap: () {
+                                            onTap: () async {
                                               int i = 0;
                                               int Index = 0;
                                               controller.post
@@ -667,6 +667,11 @@ class HomeView extends GetView<HomeController> {
                                                 }
                                                 i++;
                                               });
+                                              await getIt<AdService>()
+                                                  .bannerAd!
+                                                  .dispose();
+                                              await getIt<AdService>()
+                                                  .initBannerAds();
                                               Get.toNamed(Routes.SHOW_POST_PAGE,
                                                   arguments: {
                                                     ArgumentConstant.index:
@@ -789,6 +794,21 @@ class HomeView extends GetView<HomeController> {
                       SizedBox(
                         height: MySize.getHeight(10),
                       ),
+                      // StreamBuilder<QuerySnapshot>(
+                      //   builder: (context, data) {
+                      //     if (data.connectionState == ConnectionState.waiting) {
+                      //       return SizedBox();
+                      //     } else if (data.hasError) {
+                      //       print("object");
+                      //       return SizedBox();
+                      //     } else {
+                      //       AdService.isVisible.value =
+                      //           data.data!.docs[0]["isVisible"];
+                      //       return SizedBox();
+                      //     }
+                      //   },
+                      //   stream: FireController().adsVisible(),
+                      // ),
                     ],
                   ),
                 ),
