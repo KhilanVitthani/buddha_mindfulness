@@ -108,12 +108,12 @@ class LikeScreenView extends GetView<LikeScreenController> {
                                           int Index = 0;
                                           controller.homeController!.post
                                               .forEach((element) {
-                                            if (element.dateTime ==
+                                            if (element.uId ==
                                                 controller.homeController!.post
                                                     .where((e) =>
                                                         e.isLiked!.isTrue)
                                                     .toList()[index]
-                                                    .dateTime) {
+                                                    .uId) {
                                               Index = i;
                                             }
                                             i++;

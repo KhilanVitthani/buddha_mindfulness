@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:firebase_database/firebase_database.dart';
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../app/models/daily_thought_model.dart';
@@ -26,77 +22,91 @@ class FireController {
 
   Future<List<dailyThoughtModel>> getPostData() async {
     print('getMessage');
-    // QuerySnapshot querySnapshot = await _postCollectionReferance
-    //     .orderBy("dateTime", descending: false)
-    //     .get();
-    // List<dailyThoughtModel> result = [];
-    // querySnapshot.docs.forEach((doc) {
-    //   QueryDocumentSnapshot docu = doc;
-    //   print(docu.data() as Map<String, dynamic>);
-    //   result
-    //       .add(dailyThoughtModel.fromJson(docu.data() as Map<String, dynamic>));
-    // });
-    RxList<dailyThoughtModel> result = RxList<dailyThoughtModel>([]);
-    await FirebaseDatabase.instance
-        .ref()
-        .child('post')
-        .orderByChild('dateTime')
-        .onChildAdded
-        .listen(
-      (event) {
-        var data = event.snapshot.value;
-        // print(event.snapshot.value);
-        final Map<String, dynamic> convertedData = jsonDecode(jsonEncode(data));
-        // print(convertedData);
-        result.add(dailyThoughtModel.fromJson(convertedData));
-        result.refresh();
-        // result.add(dailyThoughtModel.fromJson(data as Map<String, dynamic>));
-      },
-      onDone: () {
-        print("Task Done");
-      },
-    );
-
-    print("Length" + result.length.toString());
-
-    DatabaseReference ref = FirebaseDatabase.instance.ref().child('post');
-    DataSnapshot event = await ref.get();
-    print("event ${event.value}");
-
+    QuerySnapshot querySnapshot = await _postCollectionReferance
+        .orderBy("dateTime", descending: false)
+        .get();
+    List<dailyThoughtModel> result = [];
+    querySnapshot.docs.forEach((doc) {
+      QueryDocumentSnapshot docu = doc;
+      print(docu.data() as Map<String, dynamic>);
+      result
+          .add(dailyThoughtModel.fromJson(docu.data() as Map<String, dynamic>));
+    });
     return result;
   }
 
   Future<List<dailyThoughtModel>> getDailyData() async {
-    RxList<dailyThoughtModel> result = RxList<dailyThoughtModel>([]);
-    await FirebaseDatabase.instance
-        .ref()
-        .child('dailyThought')
-        .orderByChild('dateTime')
-        .onChildAdded
-        .listen(
-      (event) {
-        var data = event.snapshot.value;
-        // print(event.snapshot.value);
-        final Map<String, dynamic> convertedData = jsonDecode(jsonEncode(data));
-        // print(convertedData);
-        result.add(dailyThoughtModel.fromJson(convertedData));
-        result.refresh();
-        // result.add(dailyThoughtModel.fromJson(data as Map<String, dynamic>));
-      },
-      onDone: () {
-        print("Task Done");
-      },
-    );
-
-    print("Length123" + result.length.toString());
-
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref().child('dailyThought');
-    DataSnapshot event = await ref.get();
-    print("dayli ${event.value}");
-
+    print('getMessage');
+    QuerySnapshot querySnapshot = await _dailyThoughtCollectionReferance
+        .orderBy("dateTime", descending: false)
+        .get();
+    List<dailyThoughtModel> result = [];
+    querySnapshot.docs.forEach((doc) {
+      QueryDocumentSnapshot docu = doc;
+      print(docu.data() as Map<String, dynamic>);
+      result
+          .add(dailyThoughtModel.fromJson(docu.data() as Map<String, dynamic>));
+    });
     return result;
   }
+//RealTime database
+  // Future<List<dailyThoughtModel>> getPostData() async {
+  //   print('getMessage');
+  //   RxList<dailyThoughtModel> result = RxList<dailyThoughtModel>([]);
+  //   await FirebaseDatabase.instance
+  //       .ref()
+  //       .child('post')
+  //       .orderByChild('dateTime')
+  //       .onChildAdded
+  //       .listen(
+  //     (event) {
+  //       var data = event.snapshot.value;
+  //       final Map<String, dynamic> convertedData = jsonDecode(jsonEncode(data));
+  //       result.add(dailyThoughtModel.fromJson(convertedData));
+  //       result.refresh();
+  //     },
+  //     onDone: () {
+  //       print("Task Done");
+  //     },
+  //   );
+  //
+  //   print("Length" + result.length.toString());
+  //
+  //   DatabaseReference ref = FirebaseDatabase.instance.ref().child('post');
+  //   DataSnapshot event = await ref.get();
+  //   print("event ${event.value}");
+  //
+  //   return result;
+  // }
+  //
+  // Future<List<dailyThoughtModel>> getDailyData() async {
+  //   RxList<dailyThoughtModel> result = RxList<dailyThoughtModel>([]);
+  //   await FirebaseDatabase.instance
+  //       .ref()
+  //       .child('dailyThought')
+  //       .orderByChild('dateTime')
+  //       .onChildAdded
+  //       .listen(
+  //     (event) {
+  //       var data = event.snapshot.value;
+  //       final Map<String, dynamic> convertedData = jsonDecode(jsonEncode(data));
+  //       result.add(dailyThoughtModel.fromJson(convertedData));
+  //       result.refresh();
+  //     },
+  //     onDone: () {
+  //       print("Task Done");
+  //     },
+  //   );
+  //
+  //   print("Length123" + result.length.toString());
+  //
+  //   DatabaseReference ref =
+  //       FirebaseDatabase.instance.ref().child('dailyThought');
+  //   DataSnapshot event = await ref.get();
+  //   print("dayli ${event.value}");
+  //
+  //   return result;
+  // }
 
   Stream<QuerySnapshot> getDailyThought() {
     print('getMessage');

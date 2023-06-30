@@ -146,13 +146,13 @@ class HomeView extends GetWidget<HomeController> {
                                                   int Index = 0;
                                                   controller.post
                                                       .forEach((element) {
-                                                    if (element.dateTime ==
+                                                    if (element.uId ==
                                                         controller.post
                                                             .where((e) => e
                                                                 .isDaily!
                                                                 .isTrue)
                                                             .toList()[index]
-                                                            .dateTime) {
+                                                            .uId) {
                                                       Index = i;
                                                     }
                                                     i++;
@@ -331,7 +331,7 @@ class HomeView extends GetWidget<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .dateTime
+                                                                              .uId
                                                                               .toString()
                                                                               .trim());
                                                                     } else {
@@ -340,7 +340,7 @@ class HomeView extends GetWidget<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .dateTime
+                                                                              .uId
                                                                               .toString()
                                                                               .trim());
                                                                     }
@@ -644,7 +644,7 @@ class HomeView extends GetWidget<HomeController> {
                                     print(controller.post
                                         .where((e) => e.isDaily!.isFalse)
                                         .toList()[index]
-                                        .dateTime);
+                                        .uId);
                                     return (controller.post
                                             .where((e) => e.isDaily!.isFalse)
                                             .toList()[index]
@@ -657,12 +657,12 @@ class HomeView extends GetWidget<HomeController> {
                                               int Index = 0;
                                               controller.post
                                                   .forEach((element) {
-                                                if (element.dateTime ==
+                                                if (element.uId ==
                                                     controller.post
                                                         .where((e) =>
                                                             e.isDaily!.isFalse)
                                                         .toList()[index]
-                                                        .dateTime) {
+                                                        .uId) {
                                                   Index = i;
                                                 }
                                                 i++;
