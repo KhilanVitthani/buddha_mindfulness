@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../constants/api_constants.dart';
@@ -148,7 +146,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                                     .homeController!
                                                     .post[
                                                         controller.Index.value]
-                                                    .dateTime
+                                                    .uId
                                                     .toString()
                                                     .trim());
                                           } else {
@@ -157,7 +155,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                                     .homeController!
                                                     .post[
                                                         controller.Index.value]
-                                                    .dateTime
+                                                    .uId
                                                     .toString()
                                                     .trim());
                                           }
@@ -344,7 +342,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                                     .homeController!
                                                     .post[
                                                         controller.Index.value]
-                                                    .dateTime
+                                                    .uId
                                                     .toString()
                                                     .trim());
                                           } else {
@@ -353,7 +351,7 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                                     .homeController!
                                                     .post[
                                                         controller.Index.value]
-                                                    .dateTime
+                                                    .uId
                                                     .toString()
                                                     .trim());
                                           }

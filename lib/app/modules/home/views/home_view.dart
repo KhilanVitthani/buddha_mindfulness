@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,9 @@ import 'package:gallery_saver/gallery_saver.dart';
 
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+
+
+
 import '../../../../constants/api_constants.dart';
 import '../../../../constants/color_constant.dart';
 import '../../../../constants/firebase_controller.dart';
@@ -331,7 +335,7 @@ class HomeView extends GetWidget<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .dateTime
+                                                                              .uId
                                                                               .toString()
                                                                               .trim());
                                                                     } else {
@@ -340,7 +344,7 @@ class HomeView extends GetWidget<HomeController> {
                                                                               .post
                                                                               .where((e) => e.isDaily!.isTrue)
                                                                               .toList()[index]
-                                                                              .dateTime
+                                                                              .uId
                                                                               .toString()
                                                                               .trim());
                                                                     }

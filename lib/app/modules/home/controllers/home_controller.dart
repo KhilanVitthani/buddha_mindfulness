@@ -1,7 +1,10 @@
 import 'dart:convert';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../constants/api_constants.dart';
@@ -36,26 +39,13 @@ class HomeController extends GetxController {
         await getIt<AdService>().initBannerAds();
         getIt<TimerService>().verifyTimer();
       });
-      await FireController().getDailyData().then((value) {
-        value.reversed.forEach((element) {
-          if (likeList.contains(element.dateTime.toString())) {
-            element.isLiked!.value = true;
-          }
-          if (!post.contains(element)) {
-            element.isDaily!.value = true;
-            post.add(element);
-            print(element.isDaily);
-          }
-        });
-        print("DaiLength := ${value.length}");
 
-        update();
-      }).catchError((error) {
-        print(error);
-      });
+      if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
+        likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
+      }
       await FireController().getPostData().then((value) {
         value.reversed.forEach((element) {
-          if (likeList.contains(element.dateTime.toString())) {
+          if (likeList.any((e) => e == element.uId.toString())) {
             element.isLiked!.value = true;
           }
           if (!post.contains(element)) {
@@ -70,7 +60,7 @@ class HomeController extends GetxController {
       });
       await FireController().getDailyData().then((value) {
         value.reversed.forEach((element) {
-          if (likeList.contains(element.dateTime.toString())) {
+          if (likeList.contains(element.uId.toString())) {
             element.isLiked!.value = true;
           }
           if (!post.contains(element)) {
@@ -85,9 +75,6 @@ class HomeController extends GetxController {
       }).catchError((error) {
         print(error);
       });
-      if (!isNullEmptyOrFalse(box.read(ArgumentConstant.likeList))) {
-        likeList = (jsonDecode(box.read(ArgumentConstant.likeList))).toList();
-      }
       box.write(ArgumentConstant.isFirstTime, false);
       if (getIt<TimerService>().is40SecCompleted) {
         await initInterstitialAdAds();

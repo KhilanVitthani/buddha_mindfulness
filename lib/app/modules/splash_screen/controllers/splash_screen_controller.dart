@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/api_constants.dart';
@@ -27,11 +27,9 @@ class SplashScreenController extends GetxController {
         isFirstTime.value = box.read(ArgumentConstant.isFirstTime);
       }
       if (isNullEmptyOrFalse(isFirstTime)) {
-        Timer(Duration(seconds: 3), () {
-          Get.offAllNamed(Routes.HOME);
-        });
+        time();
       } else {
-        await initInterstitialAdAds();
+        time();
       }
     });
 
@@ -39,37 +37,37 @@ class SplashScreenController extends GetxController {
   }
 
   time() async {
-   await Timer(Duration(seconds: 5), () async {
-            await initInterstitialAdAds();
-          });
+    await Timer(Duration(seconds: 3), () async {
+      Get.offAllNamed(Routes.HOME);
+    });
   }
 
-  initInterstitialAdAds() async {
-    InterstitialAd.load(
-        adUnitId: "ca-app-pub-3940256099942544/1033173712",
-        request: AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (ad) async {
-            interstitialAd = ad;
-            isAdLoaded.value = true;
-            if (!isNullEmptyOrFalse(isAddShow.value)) {
-              if (isAdLoaded.value) {
-                interstitialAd!.show().then((value) {
-                  Get.offAllNamed(Routes.HOME);
-                });
-              } else {
-                Get.offAllNamed(Routes.HOME);
-              }
-            } else {
-              Get.offAllNamed(Routes.HOME);
-            }
-          },
-          onAdFailedToLoad: (error) {
-            Get.offAllNamed(Routes.HOME);
-            interstitialAd!.dispose();
-          },
-        ));
-  }
+  // initInterstitialAdAds() async {
+  //   InterstitialAd.load(
+  //       adUnitId: "ca-app-pub-3940256099942544/1033173712",
+  //       request: AdRequest(),
+  //       adLoadCallback: InterstitialAdLoadCallback(
+  //         onAdLoaded: (ad) async {
+  //           interstitialAd = ad;
+  //           isAdLoaded.value = true;
+  //           if (!isNullEmptyOrFalse(isAddShow.value)) {
+  //             if (isAdLoaded.value) {
+  //               interstitialAd!.show().then((value) {
+  //                 Get.offAllNamed(Routes.HOME);
+  //               });
+  //             } else {
+  //               Get.offAllNamed(Routes.HOME);
+  //             }
+  //           } else {
+  //             Get.offAllNamed(Routes.HOME);
+  //           }
+  //         },
+  //         onAdFailedToLoad: (error) {
+  //           Get.offAllNamed(Routes.HOME);
+  //           interstitialAd!.dispose();
+  //         },
+  //       ));
+  // }
 
   @override
   void onReady() {
@@ -78,10 +76,9 @@ class SplashScreenController extends GetxController {
 
   @override
   void onClose() {
-    if(isAdLoaded.value)
-      {
-        interstitialAd!.dispose();
-      }
+    if (isAdLoaded.value) {
+      interstitialAd!.dispose();
+    }
     super.onClose();
   }
 }
