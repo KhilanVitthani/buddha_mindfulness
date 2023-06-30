@@ -1,5 +1,3 @@
-import 'package:buddha_mindfulness/constants/color_constant.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/api_constants.dart';
+import '../../../../constants/color_constant.dart';
 import '../../../../constants/firebase_controller.dart';
 import '../../../../constants/sizeConstant.dart';
 import '../../../../main.dart';
@@ -23,8 +22,9 @@ class LikeScreenView extends GetView<LikeScreenController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        await getIt<AdService>().bannerAd!.dispose();
+        await getIt<AdService>().initBannerAds();
         Get.toNamed(Routes.HOME);
-
         return await true;
       },
       child: GetBuilder<LikeScreenController>(
@@ -46,6 +46,8 @@ class LikeScreenView extends GetView<LikeScreenController> {
                   ),
                   leading: GestureDetector(
                     onTap: () async {
+                      await getIt<AdService>().bannerAd!.dispose();
+                      await getIt<AdService>().initBannerAds();
                       Get.toNamed(Routes.HOME);
                     },
                     child: Container(
@@ -101,21 +103,26 @@ class LikeScreenView extends GetView<LikeScreenController> {
                                       print(DateTime.now()
                                           .microsecondsSinceEpoch);
                                       return GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
                                           int i = 0;
                                           int Index = 0;
                                           controller.homeController!.post
                                               .forEach((element) {
-                                            if (element.uId ==
+                                            if (element.dateTime ==
                                                 controller.homeController!.post
                                                     .where((e) =>
                                                         e.isLiked!.isTrue)
                                                     .toList()[index]
-                                                    .uId) {
+                                                    .dateTime) {
                                               Index = i;
                                             }
                                             i++;
                                           });
+                                          await getIt<AdService>()
+                                              .bannerAd!
+                                              .dispose();
+                                          await getIt<AdService>()
+                                              .initBannerAds();
                                           Get.toNamed(Routes.SHOW_POST_PAGE,
                                               arguments: {
                                                 ArgumentConstant.index: Index,
@@ -210,7 +217,11 @@ class LikeScreenView extends GetView<LikeScreenController> {
                           );
                         }),
                       ),
-                      getIt<AdService>().getBanners(),
+                      (controller.isAddShow.isTrue)
+                          ? getIt<AdService>().isBannerLoaded.isTrue
+                              ? getIt<AdService>().getBannerAds()
+                              : SizedBox()
+                          : SizedBox(),
                     ],
                   ),
                 ),
