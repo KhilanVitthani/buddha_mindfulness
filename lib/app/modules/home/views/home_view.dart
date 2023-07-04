@@ -509,10 +509,11 @@ class HomeView extends GetWidget<HomeController> {
                                                                       file =
                                                                           value;
                                                                     });
-                                                                    Share
-                                                                        .shareFiles([
+                                                                    Share.shareFiles([
                                                                       file!.path
-                                                                    ]);
+                                                                    ],
+                                                                        text:
+                                                                            "${ArgumentConstant.shareLink}");
                                                                   },
                                                                   child:
                                                                       SvgPicture

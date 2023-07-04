@@ -13,6 +13,8 @@ class ArgumentConstant {
   static const isFromLike = "isFromLike";
   static const isFromSplash = "isFromSplash";
   static const isFirstTime = "isFirstTime";
+  static const shareLink =
+      "Experience the divine with Buddha Quotes! Share your devotion with loved ones and spread the message of peace and harmony. Download now \n https://play.google.com/store/apps/details?id=com.mobileappxperts.buddhaquotes";
 }
 
 getLogOut() {

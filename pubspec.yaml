@@ -23,6 +23,9 @@ dependencies:
   share_plus:
   flutter_cache_manager: ^3.3.0
   gallery_saver: ^2.3.2
+  rate_my_app: ^1.1.1
+  shared_preferences: ^2.0.13
+
   flick_video_player: ^0.5.0
   video_player:
   fluttertoast:

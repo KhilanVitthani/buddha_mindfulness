@@ -267,7 +267,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                                 .hideCircularDialog(context);
                                             file = value;
                                           });
-                                          Share.shareFiles([file!.path]);
+                                          Share.shareFiles([file!.path],
+                                              text:
+                                                  "${ArgumentConstant.shareLink}");
                                         },
                                         child: SvgPicture.asset(
                                           imagePath + "share.svg",
@@ -463,7 +465,9 @@ class ShowPostPageView extends GetWidget<ShowPostPageController> {
                                           }).catchError((error) {
                                             print(error);
                                           });
-                                          Share.shareFiles([file!.path]);
+                                          Share.shareFiles([file!.path],
+                                              text:
+                                                  "${ArgumentConstant.shareLink}");
                                         },
                                         child: SvgPicture.asset(
                                           imagePath + "share.svg",

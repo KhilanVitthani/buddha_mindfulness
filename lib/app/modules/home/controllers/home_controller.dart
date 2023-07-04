@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -6,6 +7,8 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:get/get.dart';
+import 'package:rate_my_app/rate_my_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../constants/api_constants.dart';
 import '../../../../constants/firebase_controller.dart';
@@ -31,9 +34,25 @@ class HomeController extends GetxController {
   // BannerAd? bannerAd;
   // RxBool isBannerLoaded = false.obs;
   RxBool isAddShow = false.obs;
+  SharedPreferences? prefs;
+  int launchCount = 0;
+  DateTime? currentDate;
+  RateMyApp rateMyApp = RateMyApp(
+      preferencesPrefix: 'rateMyApp_',
+      minDays: 7,
+      minLaunches: 10,
+      remindDays: 7,
+      remindLaunches: 10,
+      googlePlayIdentifier: 'com.mobileappxperts.buddhaquotes');
   @override
   Future<void> onInit() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await initPreferences();
+      if (shouldShowPopup()) {
+        rateMyApp.init().then((value) {
+          ShowRateUsPopup();
+        });
+      }
       await FireController().adsVisible().then((value) async {
         isAddShow.value = value;
         await getIt<AdService>().initBannerAds();
@@ -81,6 +100,60 @@ class HomeController extends GetxController {
       }
     });
     super.onInit();
+  }
+
+  Future<void> initPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    launchCount = prefs!.getInt('launchCount') ?? 0;
+    currentDate = DateTime.now();
+    prefs!.setString('lastLaunchDate', currentDate.toString());
+    prefs!.setInt('launchCount', launchCount + 1);
+  }
+
+  bool shouldShowPopup() {
+    final lastLaunchDate = prefs!.getString('lastLaunchDate');
+    final parsedDate = DateTime.tryParse(lastLaunchDate!);
+    final currentDate = DateTime.now();
+
+    if (parsedDate != null) {
+      final difference = currentDate.difference(parsedDate).inDays;
+      return difference >= 7 && launchCount > 7;
+    }
+
+    return false;
+  }
+
+  ShowRateUsPopup() {
+    rateMyApp.showRateDialog(
+      Get.context!,
+      title: 'Rate this app', // The dialog title.0
+      message:
+          'If you like this app, please take a little bit of your time to review it !\nIt really helps us and it shouldn\'t take you more than one minute.', // The dialog message.
+      rateButton: 'RATE', // The dialog "rate" button text.
+      noButton: 'NO THANKS', // The dialog "no" button text.
+      laterButton: 'MAYBE LATER', // The dialog "later" button text.
+      listener: (button) {
+        // The button click listener (useful if you want to cancel the click event).
+        switch (button) {
+          case RateMyAppDialogButton.rate:
+            print('Clicked on "Rate".');
+            break;
+          case RateMyAppDialogButton.later:
+            print('Clicked on "Later".');
+            break;
+          case RateMyAppDialogButton.no:
+            print('Clicked on "No".');
+            break;
+        }
+
+        return true; // Return false if you want to cancel the click event.
+      },
+      ignoreNativeDialog: Platform
+          .isAndroid, // Set to false if you want to show the Apple's native app rating dialog on iOS or Google's native app rating dialog (depends on the current Platform).
+      dialogStyle: const DialogStyle(), // Custom dialog styles.
+      onDismissed: () => rateMyApp.callEvent(RateMyAppEventType
+          .laterButtonPressed), // Called when the user dismissed the dialog (either by taping outside or by pressing the "back" button).
+    );
   }
 
   initInterstitialAdAds() async {
